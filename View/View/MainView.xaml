@@ -1,0 +1,19 @@
+﻿<Window x:Class="MS_SS_TPW_Project.Presentation.View.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="MainView"
+        Height="450"
+        Width="800"
+        d:DesignHeight="450"
+        d:DesignWidth="800">
+    <Grid>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Label x:Name="greetingLabel" Content="😺" HorizontalContentAlignment="Center"></Label>
+            <Button Content="Hello World!" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click"/>
+        </StackPanel>
+
+    </Grid>
+</Window>
