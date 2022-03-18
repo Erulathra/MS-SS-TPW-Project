@@ -1,4 +1,6 @@
-﻿namespace MS_SS_TPW_Project.Data
+﻿using System;
+
+namespace Data
 {
     public class MainData
     {
