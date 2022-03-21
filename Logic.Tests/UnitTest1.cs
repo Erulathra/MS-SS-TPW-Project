@@ -15,7 +15,13 @@ namespace MS_SS_TPW_Project.Logic.Tests
         [Test]
         public void GetGreatingTest()
         {
-            Assert.AreEqual(mainLogic.GetGreeting("World"), "Hello World!");
+            Assert.AreEqual("Hello Szymon!", mainLogic.GetGreeting("Szymon"));
+        }
+
+        [Test]
+        public void GetGetHelloWorldTest()
+        {
+            Assert.AreEqual("Hello World!", mainLogic.GetHelloWorld());
         }
     }
 }
