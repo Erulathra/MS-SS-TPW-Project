@@ -13,7 +13,7 @@ namespace Data.Tests
         [SetUp]
         public void Setup()
         {
-            balls = new ArrayBalls();
+            balls = DataLayerFactory.CreateBallsList();
             testBall1 = new Ball(new Vector2(5, 10));
             testBall2 = new Ball(new Vector2(8, 4));
             testBall3 = new Ball(new Vector2(2, 9));

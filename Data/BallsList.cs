@@ -3,11 +3,11 @@ using System.Numerics;
 
 namespace Data
 {
-    public class ArrayBalls : IBalls
+    public class BallsList : IBalls
     {
-        private List<Ball> ballsList;
+        private readonly List<Ball> ballsList;
 
-        public ArrayBalls()
+        public BallsList()
         {
             this.ballsList = new List<Ball>();
         }

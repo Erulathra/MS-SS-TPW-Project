@@ -4,11 +4,11 @@ namespace Data
 {
     public class Ball
     {
-        Vector2 position;
+        private Vector2 Position { get; set; }
 
         public Ball(Vector2 position)
         {
-            this.position = position;
+            this.Position = position;
         }
     }
 }
