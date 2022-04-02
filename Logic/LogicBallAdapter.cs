@@ -20,7 +20,7 @@ public class LogicBallAdapter : ILogicBall
 	//todo: to trzeba zmienić na api
 	public LogicBallAdapter(Vector2 position)
 	{
-		this.ball = DataLayerAbstractApi.CreateBall(position);
+		this.ball = BallsDataLayerAbstractApi.CreateBall(position);
 	}
 
 	public Vector2 Position

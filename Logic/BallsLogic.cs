@@ -15,14 +15,14 @@ public class OnPositionChangeEventArgs : EventArgs
 public class BallsLogic : BallsLogicLayerAbstractApi
 {
 	public event EventHandler<OnPositionChangeEventArgs> OnPositionChange;
-	private readonly DataLayerAbstractApi balls;
+	private readonly BallsDataLayerAbstractApi balls;
 	private readonly Vector2 boardSize;
 	private CancellationTokenSource cancelSimulationSource;
 
-	public BallsLogic(Vector2 boardSize) : this(DataLayerAbstractApi.CreateBallsList(), boardSize)
+	public BallsLogic(Vector2 boardSize) : this(BallsDataLayerAbstractApi.CreateBallsList(), boardSize)
 	{ }
 
-	public BallsLogic(DataLayerAbstractApi balls, Vector2 boardSize)
+	public BallsLogic(BallsDataLayerAbstractApi balls, Vector2 boardSize)
 	{
 		this.balls = balls;
 		this.boardSize = boardSize;
@@ -34,7 +34,7 @@ public class BallsLogic : BallsLogicLayerAbstractApi
 		for (var i = 0; i < howMany; i++)
 		{
 			var randomPoint = GetRandomPointInsideBoard();
-			balls.Add(DataLayerAbstractApi.CreateBall(randomPoint));
+			balls.Add(BallsDataLayerAbstractApi.CreateBall(randomPoint));
 		}
 	}
 
@@ -55,7 +55,7 @@ public class BallsLogic : BallsLogicLayerAbstractApi
 	{
 		if (position.X < 0 || position.X > boardSize.X || position.Y < 0 || position.Y > boardSize.Y)
 			throw new PositionIsOutOfBoardException();
-		balls.Add(DataLayerAbstractApi.CreateBall(position));
+		balls.Add(BallsDataLayerAbstractApi.CreateBall(position));
 	}
 
 	public override void StartSimulation()

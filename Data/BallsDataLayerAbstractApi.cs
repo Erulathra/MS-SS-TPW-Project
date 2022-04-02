@@ -3,12 +3,12 @@ using System.Numerics;
 
 namespace TPW.Data;
 
-public abstract class DataLayerAbstractApi
+public abstract class BallsDataLayerAbstractApi
 {
 	public abstract void Add(IBall ball);
 	public abstract IBall Get(int index);
 	public abstract int GetBallCount();
-	public static DataLayerAbstractApi CreateBallsList()
+	public static BallsDataLayerAbstractApi CreateBallsList()
 	{
 		return new BallsList();
 	}

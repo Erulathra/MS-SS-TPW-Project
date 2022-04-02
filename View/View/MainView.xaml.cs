@@ -13,8 +13,6 @@ namespace TPW.Presentation.View
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
-            var name = (new MainLogic()).GetGreeting("World");
-            greetingLabel.Content = name;
         }
     }
 }

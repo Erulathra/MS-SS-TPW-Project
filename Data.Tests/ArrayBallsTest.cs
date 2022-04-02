@@ -5,7 +5,7 @@ namespace TPW.Data.Tests
 {
     public class Tests
     {
-        private DataLayerAbstractApi balls;
+        private BallsDataLayerAbstractApi balls;
         private IBall testBall1;
         private IBall testBall2;
         private IBall testBall3;
@@ -13,10 +13,10 @@ namespace TPW.Data.Tests
         [SetUp]
         public void Setup()
         {
-            balls = DataLayerAbstractApi.CreateBallsList();
-            testBall1 = DataLayerAbstractApi.CreateBall(new Vector2(5, 10));
-            testBall2 = DataLayerAbstractApi.CreateBall(new Vector2(8, 4));
-            testBall3 = DataLayerAbstractApi.CreateBall(new Vector2(2, 9));
+            balls = BallsDataLayerAbstractApi.CreateBallsList();
+            testBall1 = BallsDataLayerAbstractApi.CreateBall(new Vector2(5, 10));
+            testBall2 = BallsDataLayerAbstractApi.CreateBall(new Vector2(8, 4));
+            testBall3 = BallsDataLayerAbstractApi.CreateBall(new Vector2(2, 9));
         }
 
         [Test]

@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace TPW.Data
 {
-    internal class BallsList : DataLayerAbstractApi
+    internal class BallsList : BallsDataLayerAbstractApi
     {
         private readonly List<IBall> ballsList;
 
