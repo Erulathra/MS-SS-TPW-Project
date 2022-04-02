@@ -7,26 +7,30 @@ using TPW.Data;
 
 namespace TPW.Logic;
 
-public class OnPositionChangeEventArgs : EventArgs
+internal class BallsLogic : BallsLogicLayerAbstractApi
 {
-	public LogicBallAdapter ball;
-}
-
-public class BallsLogic : BallsLogicLayerAbstractApi
-{
-	public event EventHandler<OnPositionChangeEventArgs> OnPositionChange;
 	private readonly BallsDataLayerAbstractApi balls;
 	private readonly Vector2 boardSize;
 	private CancellationTokenSource cancelSimulationSource;
+	private int iterationCount = 0;
 
 	public BallsLogic(Vector2 boardSize) : this(BallsDataLayerAbstractApi.CreateBallsList(), boardSize)
 	{ }
 
-	public BallsLogic(BallsDataLayerAbstractApi balls, Vector2 boardSize)
+	private BallsLogic(BallsDataLayerAbstractApi balls, Vector2 boardSize)
 	{
 		this.balls = balls;
 		this.boardSize = boardSize;
 		cancelSimulationSource = new CancellationTokenSource();
+		PositionChange += (sender, args) =>
+		{
+			iterationCount++;
+		};
+	}
+
+	protected override void OnPositionChange(OnPositionChangeEventArgs args)
+	{
+		base.OnPositionChange(args);
 	}
 
 	public override void AddBalls(int howMany)
@@ -60,7 +64,7 @@ public class BallsLogic : BallsLogicLayerAbstractApi
 
 	public override void StartSimulation()
 	{
-		if (!cancelSimulationSource.IsCancellationRequested) return;
+		if (cancelSimulationSource.IsCancellationRequested) return;
 
 		cancelSimulationSource = new CancellationTokenSource();
 		Task.Factory.StartNew(Simulation, cancelSimulationSource.Token);
@@ -78,10 +82,25 @@ public class BallsLogic : BallsLogicLayerAbstractApi
 			for (var i = 0; i < balls.GetBallCount(); i++)
 			{
 				balls.Get(i).Position = GetRandomPointInsideBoard();
-				OnPositionChange?.Invoke(this, new OnPositionChangeEventArgs{ball = new LogicBallAdapter(balls.Get(i))});
+				OnPositionChange(new OnPositionChangeEventArgs{ball = new LogicBallAdapter(balls.Get(i))});
 			}
 			await Task.Delay(16, cancelSimulationSource.Token);
 		}
 	}
 
+	public override int GetBallsCount()
+	{
+		return balls.GetBallCount();
+	}
+
+	public override IList<ILogicBall> GetBalls()
+	{
+		var ballsList = new List<ILogicBall>();
+		for (int i = 0; i < balls.GetBallCount(); i++)
+		{
+			ballsList.Add(new LogicBallAdapter(balls.Get(i)));
+		}
+
+		return ballsList;
+	}
 }
