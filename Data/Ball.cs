@@ -5,7 +5,6 @@ namespace TPW.Data
     public interface IBall
     {
         Vector2 Position { get; set; }
-        void Move(Vector2 moveVector);
     }
 
     internal class Ball : IBall
@@ -17,9 +16,5 @@ namespace TPW.Data
             this.Position = position;
         }
 
-        public void Move(Vector2 moveVector)
-        {
-            this.Position += Position;
-        }
     }
 }
