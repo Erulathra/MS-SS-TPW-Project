@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 
-namespace Data
+namespace TPW.Data
 {
     public class BallsList : IBalls
     {

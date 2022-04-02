@@ -1,4 +1,4 @@
-﻿namespace Data;
+﻿namespace TPW.Data;
 
 public static class DataLayerFactory
 {

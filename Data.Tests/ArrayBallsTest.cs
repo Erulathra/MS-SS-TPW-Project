@@ -1,7 +1,7 @@
 using System.Numerics;
 using NUnit.Framework;
 
-namespace Data.Tests
+namespace TPW.Data.Tests
 {
     public class Tests
     {

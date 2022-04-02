@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Data
+namespace TPW.Data
 {
     public class Ball
     {

@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace MS_SS_TPW_Project.Logic.Tests
+namespace TPW.Logic.Tests
 {
     public class Tests
     {

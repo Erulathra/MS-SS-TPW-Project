@@ -1,4 +1,4 @@
-﻿namespace MS_SS_TPW_Project.Logic
+﻿namespace TPW.Logic
 {
     public class MainLogic
     {

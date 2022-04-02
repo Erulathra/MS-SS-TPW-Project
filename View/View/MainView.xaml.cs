@@ -1,6 +1,7 @@
-﻿using MS_SS_TPW_Project.Logic;
+﻿using System.Windows;
+using TPW.Logic;
 
-namespace Presentation.View
+namespace TPW.Presentation.View
 {
     public partial class MainView : Window
     {
