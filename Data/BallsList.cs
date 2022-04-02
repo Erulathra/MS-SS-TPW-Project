@@ -3,26 +3,26 @@ using System.Numerics;
 
 namespace TPW.Data
 {
-    public class BallsList : IBalls
+    internal class BallsList : DataLayerAbstractApi
     {
-        private readonly List<Ball> ballsList;
+        private readonly List<IBall> ballsList;
 
         public BallsList()
         {
-            this.ballsList = new List<Ball>();
+            this.ballsList = new List<IBall>();
         }
 
-        public void Add(Ball ball)
+        public override void Add(IBall ball)
         {
             ballsList.Add(ball);
         }
 
-        public Ball Get(int index)
+        public override IBall Get(int index)
         {
             return ballsList[index];
         }
 
-        public int GetBallCount()
+        public override int GetBallCount()
         {
             return ballsList.Count;
         }

@@ -5,18 +5,18 @@ namespace TPW.Data.Tests
 {
     public class Tests
     {
-        private IBalls balls;
-        private Ball testBall1;
-        private Ball testBall2;
-        private Ball testBall3;
+        private DataLayerAbstractApi balls;
+        private IBall testBall1;
+        private IBall testBall2;
+        private IBall testBall3;
 
         [SetUp]
         public void Setup()
         {
-            balls = DataLayerFactory.CreateBallsList();
-            testBall1 = new Ball(new Vector2(5, 10));
-            testBall2 = new Ball(new Vector2(8, 4));
-            testBall3 = new Ball(new Vector2(2, 9));
+            balls = DataLayerAbstractApi.CreateBallsList();
+            testBall1 = DataLayerAbstractApi.CreateBall(new Vector2(5, 10));
+            testBall2 = DataLayerAbstractApi.CreateBall(new Vector2(8, 4));
+            testBall3 = DataLayerAbstractApi.CreateBall(new Vector2(2, 9));
         }
 
         [Test]

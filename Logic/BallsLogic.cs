@@ -6,10 +6,13 @@ namespace TPW.Logic;
 
 public class BallsLogic
 {
-	private readonly IBalls balls;
+	private readonly DataLayerAbstractApi balls;
 	private readonly Vector2 boardSize;
 
-	public BallsLogic(IBalls balls, Vector2 boardSize)
+	public BallsLogic(Vector2 boardSize) : this(DataLayerAbstractApi.CreateBallsList(), boardSize)
+	{ }
+
+	public BallsLogic(DataLayerAbstractApi balls, Vector2 boardSize)
 	{
 		this.balls = balls;
 		this.boardSize = boardSize;
