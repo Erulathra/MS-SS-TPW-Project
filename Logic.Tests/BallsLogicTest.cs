@@ -8,7 +8,7 @@ public class BallsLogicTest
 {
 	private BallsLogicLayerAbstractApi ballsLogic;
 	private readonly Vector2 boardSize = new Vector2(150, 50);
-	
+
 	[SetUp]
 	public void SetUp()
 	{
@@ -18,16 +18,16 @@ public class BallsLogicTest
 	[Test]
 	public void AddBallTest()
 	{
-		ballsLogic.AddBall(boardSize/2);
+		ballsLogic.AddBall(boardSize / 2);
 		Assert.AreEqual(1, ballsLogic.GetBallsCount());
-		Assert.AreEqual(boardSize/2, ballsLogic.GetBalls()[0].Position);
+		Assert.AreEqual(boardSize / 2, ballsLogic.GetBalls()[0].Position);
 	}
-	
+
 	[Test]
 	public void AddBallOutOfBoardTest()
 	{
 		Assert.Throws<PositionIsOutOfBoardException>((() => ballsLogic.AddBall(boardSize + Vector2.One * 20)));
-		Assert.Throws<PositionIsOutOfBoardException>((() => ballsLogic.AddBall(Vector2.One * - 20)));
+		Assert.Throws<PositionIsOutOfBoardException>((() => ballsLogic.AddBall(Vector2.One * -20)));
 		Assert.AreEqual(0, ballsLogic.GetBallsCount());
 	}
 
@@ -50,23 +50,27 @@ public class BallsLogicTest
 		for (int i = 0; i < ballsLogic.GetBallsCount(); i++)
 		{
 			startPositionList.Add(ballsLogic.GetBalls()[i].Position);
-		}	
-		
+		}
+
 		ballsLogic.PositionChange += (sender, args) =>
 		{
 			interactionCount++;
-			if (interactionCount > 50)
+			if (interactionCount >= 50)
 			{
 				ballsLogic.StopSimulation();
 			}
 		};
 		ballsLogic.StartSimulation();
-		while (interactionCount < 50);
-		Assert.AreNotEqual(0, interactionCount);
+		while (interactionCount < 55) ;
+		Assert.GreaterOrEqual(interactionCount, 50);
 		for (int i = 0; i < ballsLogic.GetBallsCount(); i++)
 		{
-            Assert.AreNotEqual(startPositionList[i], ballsLogic.GetBalls()[i].Position);
+			if (startPositionList[i] != ballsLogic.GetBalls()[i].Position)
+			{
+				return;
+			}
 		}
+
+		Assert.Fail();
 	}
-	
 }
