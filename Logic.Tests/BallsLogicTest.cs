@@ -12,7 +12,7 @@ public class BallsLogicTest
 	[SetUp]
 	public void SetUp()
 	{
-		ballsLogic = BallsLogicLayerAbstractApi.CreateBallsLogic(boardSize);
+		ballsLogic = BallsLogicLayerAbstractApi.CreateBallsLogic(boardSize, new DataLayerFixture());
 	}
 
 	[Test]
