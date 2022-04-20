@@ -11,7 +11,6 @@
 			<Setter Property="Background" Value="BlueViolet"/>
 			<Setter Property="Foreground" Value="AntiqueWhite"/>
 			<Setter Property="FontSize" Value="12"/>
-			<Setter Property="FontWeight" Value="Heavy"/>
 			<Style.Triggers>
 				<Trigger Property="IsMouseOver" Value="True">
 					<Setter Property="Foreground" Value="Black"/>

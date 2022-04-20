@@ -30,6 +30,10 @@
 				    Content="{Binding BallsCount}" />
 			<Button Content="➖" HorizontalAlignment="Center" VerticalAlignment="Center"
                     Command="{Binding DecreaseButton}"/>
+			<Button Content="Start" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Command="{Binding StartSimulationButton}"/>
+			<Button Content="Stop" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Command="{Binding StopSimulationButton}"/>
 		</StackPanel>
 		<StackPanel>
 			<Canvas x:Name="ballCanvas">

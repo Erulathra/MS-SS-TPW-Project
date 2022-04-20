@@ -25,10 +25,14 @@ namespace TPW.Presentation.ViewModel
         }
         public ICommand IncreaseButton { get; }
         public ICommand DecreaseButton { get; }
+        public ICommand StartSimulationButton { get; }
+        public ICommand StopSimulationButton { get; }
 
         public MainViewModel()
         {
             model = new Model.MainModel();
+            BallsCount = 5;
+
             IncreaseButton = new RelayCommand(() =>
             {
                 BallsCount += 1;
@@ -38,8 +42,14 @@ namespace TPW.Presentation.ViewModel
                 BallsCount -= 1;
             });
 
-            BallsCount = 5;
-            model.StartSimulation(0);
+            StartSimulationButton = new RelayCommand(() =>
+            {
+                model.StartSimulation();
+            });
+            StopSimulationButton = new RelayCommand(() =>
+            {
+                model.StopSimulation();
+            });
         }
 
         // Event for View update

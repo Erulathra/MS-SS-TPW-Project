@@ -9,52 +9,42 @@ namespace TPW.Presentation.Model
 {
     public class MainModel
     {
-        private Vector2 boardSize = new Vector2(650, 400);
+        private Vector2 boardSize;
+        private int ballsAmount;
         private BallsLogicLayerAbstractApi ballsLogic;
 
         public event EventHandler<OnPositionChangeEventArgs>? BallPositionChange;
 
         public MainModel()
         {
+            boardSize = new Vector2(650, 400);
+            ballsAmount = 0;
             ballsLogic = BallsLogicLayerAbstractApi.CreateBallsLogic(boardSize);
             /*ballsLogic.PositionChange += (sender, args) =>
             {
                 //move ball
             }*/
         }
-        internal void StartSimulation(int ballsAmount)
+        internal void StartSimulation()
         {
             ballsLogic.AddBalls(ballsAmount);
             ballsLogic.StartSimulation();
         }
 
-        internal void AddBalls(int amount)
+        internal void StopSimulation()
 		{
-            ballsLogic.AddBalls(amount);
-		}
-
-        internal void RestartBoard(int amount)
-		{
-            throw new NotImplementedException();
-            /*ballsLogic = BallsLogicLayerAbstractApi.CreateBallsLogic(boardSize);
-            ballsLogic.AddBalls(amount);
-            ballsLogic.StartSimulation();*/
+            ballsLogic.StopSimulation();
+            ballsLogic = BallsLogicLayerAbstractApi.CreateBallsLogic(boardSize);
         }
 
         internal void SetBallNumber(int amount)
 		{
-            int amountNow = GetBallsCount();
-            if (amountNow < amount)
-                ballsLogic.AddBalls(amount - amountNow);
-            else if(amountNow > amount)
-            {
-                RestartBoard(amount);
-            }
+            ballsAmount = amount;
         }
 
         internal int GetBallsCount()
 		{
-            return ballsLogic.GetBallsCount();
+            return ballsAmount;
 		}
 
         internal void OnBallPositionChange(OnPositionChangeEventArgs args)
