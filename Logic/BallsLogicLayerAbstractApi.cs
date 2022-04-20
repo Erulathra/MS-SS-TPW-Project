@@ -33,6 +33,10 @@ public abstract class BallsLogicLayerAbstractApi
 
 	public static BallsLogicLayerAbstractApi CreateBallsLogic(Vector2 boardSize, BallsDataLayerAbstractApi dataApi = default(BallsDataLayerAbstractApi))
 	{
+		if (dataApi == null)
+		{
+			dataApi = BallsDataLayerAbstractApi.CreateBallsList();
+		}
 		return new BallsLogic(dataApi, boardSize);
 	}
 }
