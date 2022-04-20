@@ -39,6 +39,7 @@ namespace TPW.Presentation.ViewModel
             });
 
             BallsCount = 5;
+            model.StartSimulation(0);
         }
 
         // Event for View update

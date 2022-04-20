@@ -33,10 +33,13 @@ namespace TPW.Presentation.Model
             ballsLogic.AddBalls(amount);
 		}
 
-        internal void RemoveBalls(int amount)
+        internal void RestartBoard(int amount)
 		{
             throw new NotImplementedException();
-		}
+            /*ballsLogic = BallsLogicLayerAbstractApi.CreateBallsLogic(boardSize);
+            ballsLogic.AddBalls(amount);
+            ballsLogic.StartSimulation();*/
+        }
 
         internal void SetBallNumber(int amount)
 		{
@@ -45,7 +48,7 @@ namespace TPW.Presentation.Model
                 ballsLogic.AddBalls(amount - amountNow);
             else if(amountNow > amount)
             {
-                RemoveBalls(amountNow - amount);
+                RestartBoard(amount);
             }
         }
 
