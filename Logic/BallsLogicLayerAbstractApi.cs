@@ -26,12 +26,13 @@ public abstract class BallsLogicLayerAbstractApi
 	public abstract int GetBallsCount();
 	public abstract IList<ILogicBall> GetBalls();
 
-	internal virtual void OnPositionChange(OnPositionChangeEventArgs args)
+	protected virtual void OnPositionChange(OnPositionChangeEventArgs args)
 	{
 		PositionChange?.Invoke(this, args);
 	}
-	public static BallsLogicLayerAbstractApi CreateBallsLogic(Vector2 boardSize)
+
+	public static BallsLogicLayerAbstractApi CreateBallsLogic(Vector2 boardSize, BallsDataLayerAbstractApi dataApi = default(BallsDataLayerAbstractApi))
 	{
-		return new BallsLogic(BallsDataLayerAbstractApi.CreateBallsList(), boardSize);
+		return new BallsLogic(dataApi, boardSize);
 	}
 }

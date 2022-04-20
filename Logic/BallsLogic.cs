@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading;
+using System.Threading.Tasks;
 using TPW.Data;
 
 namespace TPW.Logic;
@@ -9,7 +10,7 @@ namespace TPW.Logic;
 internal class BallsLogic : BallsLogicLayerAbstractApi
 {
 	private readonly BallsDataLayerAbstractApi dataBalls;
-	internal CancellationTokenSource CancelSimulationSource;
+	public CancellationTokenSource CancelSimulationSource { get; private set; }
 
 	public BallsLogic(BallsDataLayerAbstractApi dataBalls, Vector2 boardSize)
 	{
@@ -20,7 +21,7 @@ internal class BallsLogic : BallsLogicLayerAbstractApi
 
 	public Vector2 BoardSize { get; }
 
-	internal override void OnPositionChange(OnPositionChangeEventArgs args)
+	protected override void OnPositionChange(OnPositionChangeEventArgs args)
 	{
 		base.OnPositionChange(args);
 	}
@@ -62,7 +63,8 @@ internal class BallsLogic : BallsLogicLayerAbstractApi
 		for (var i = 0; i < dataBalls.GetBallCount(); i++)
 		{
 			var ball = new LogicBallDecorator(dataBalls.Get(i), this);
-			ball.Simulate();
+			ball.PositionChange += (sender, args) => OnPositionChange(args);
+			Task.Factory.StartNew(ball.Simulate, CancelSimulationSource.Token);
 		}
 	}
 

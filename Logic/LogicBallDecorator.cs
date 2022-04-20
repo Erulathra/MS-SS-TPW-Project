@@ -12,8 +12,10 @@ public interface ILogicBall
 
 internal class LogicBallDecorator : ILogicBall
 {
+	private static readonly double BallRadius = 3.0;
 	private readonly IBall ball;
 	private readonly BallsLogic owner;
+	public event EventHandler<OnPositionChangeEventArgs>? PositionChange;
 
 	public LogicBallDecorator(IBall ball, BallsLogic owner)
 	{
@@ -24,6 +26,7 @@ internal class LogicBallDecorator : ILogicBall
 	public LogicBallDecorator(Vector2 position, BallsLogic owner)
 	{
 		ball = BallsDataLayerAbstractApi.CreateBall(position);
+		this.owner = owner;
 	}
 
 	public Vector2 Position
@@ -34,22 +37,23 @@ internal class LogicBallDecorator : ILogicBall
 
 	public async void Simulate()
 	{
-		while (!owner.CancelSimulationSource.IsCancellationRequested)
+		while (true)
 		{
 			Position = GetRandomPointInsideBoard();
-			owner.OnPositionChange(new OnPositionChangeEventArgs(this));
+			PositionChange?.Invoke(this, new OnPositionChangeEventArgs(this));
 
-			await Task.Delay(16, owner.CancelSimulationSource.Token);
+			await Task.Delay(16, owner.CancelSimulationSource.Token).ContinueWith(tsk => { });
 		}
 	}
 
 	private Vector2 GetRandomPointInsideBoard()
 	{
-		Vector2 newPosition; 
+		Vector2 newPosition;
 		do
 		{
 			newPosition = Position + GetRandomNormalizedVector();
-		} while (Position.X < 0 || Position.X > owner.BoardSize.X || Position.Y < 0 || Position.Y > owner.BoardSize.Y);
+		} while (Position.X < BallRadius || Position.X > owner.BoardSize.X - BallRadius
+		                                 || Position.Y < BallRadius || Position.Y > owner.BoardSize.Y - BallRadius);
 
 		return newPosition;
 	}
