@@ -9,39 +9,48 @@ namespace TPW.Presentation.ViewModel
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        #region code responsible for notifying View about changes
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        private Model.MainModel model;
+
+        public int BallsCount
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            get { return model.GetBallsCount(); }
+            set
+            {
+                if (value >= 0)
+                {
+                    model.SetBallNumber(value);
+                    OnPropertyChanged();
+                }
+            }
         }
-        #endregion
-
-        private string title;
-        public string Title { 
-            get { return title; } 
-            set 
-            { 
-                title = value; 
-                OnPropertyChanged(); 
-            } 
-        }
-
-        public ICommand HelloButtonClick { get; set; }
-
+        public ICommand IncreaseButton { get; }
+        public ICommand DecreaseButton { get; }
 
         public MainViewModel()
         {
-            Title = "😺";
-            HelloButtonClick = new RelayCommand(() =>
+            model = new Model.MainModel();
+            IncreaseButton = new RelayCommand(() =>
             {
-                this.Title = "Hello!";
+                BallsCount += 1;
             });
+            DecreaseButton = new RelayCommand(() =>
+            {
+                BallsCount -= 1;
+            });
+
+            BallsCount = 5;
+        }
+
+        // Event for View update
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string caller = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(caller));
         }
     }
 }
 
-// Frequently used in mvvm model
+
 public class RelayCommand : ICommand
 {
     private readonly Action _handler;
@@ -50,7 +59,7 @@ public class RelayCommand : ICommand
     public RelayCommand(Action handler)
     {
         _handler = handler;
-        _isEnabled = true;
+        IsEnabled = true;
     }
 
     public bool IsEnabled
