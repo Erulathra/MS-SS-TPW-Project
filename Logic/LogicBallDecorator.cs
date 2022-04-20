@@ -15,18 +15,21 @@ internal class LogicBallDecorator : ILogicBall
 	private static readonly double BallRadius = 3.0;
 	private readonly IBall ball;
 	private readonly BallsLogic owner;
+	private Random rng;
 	public event EventHandler<OnPositionChangeEventArgs>? PositionChange;
 
 	public LogicBallDecorator(IBall ball, BallsLogic owner)
 	{
 		this.ball = ball;
 		this.owner = owner;
+		rng = new Random();
 	}
 
 	public LogicBallDecorator(Vector2 position, BallsLogic owner)
 	{
 		ball = BallsDataLayerAbstractApi.CreateBall(position);
 		this.owner = owner;
+		rng = new Random();
 	}
 
 	public Vector2 Position
@@ -58,9 +61,9 @@ internal class LogicBallDecorator : ILogicBall
 		return newPosition;
 	}
 
+	
 	private Vector2 GetRandomNormalizedVector()
 	{
-		var rng = new Random();
 		var x = (float)rng.NextDouble();
 		var y = (float)rng.NextDouble();
 		var result = new Vector2(x, y);
