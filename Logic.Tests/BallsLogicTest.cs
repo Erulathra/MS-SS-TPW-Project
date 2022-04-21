@@ -61,10 +61,10 @@ public class BallsLogicTest
 			}
 		};
 		ballsLogic.StartSimulation();
-		while (interactionCount < 55)
+		while (interactionCount < 50)
 		{ }
 
-		Assert.GreaterOrEqual(interactionCount, 50);
+		Assert.GreaterOrEqual(interactionCount, 49);
 		for (int i = 0; i < ballsLogic.GetBallsCount(); i++)
 		{
 			if (startPositionList[i] != ballsLogic.GetBalls()[i].Position)
