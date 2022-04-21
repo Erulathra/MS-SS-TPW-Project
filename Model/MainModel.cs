@@ -25,29 +25,29 @@ namespace TPW.Presentation.Model
                 //move ball
             }*/
         }
-        internal void StartSimulation()
+        public void StartSimulation()
         {
             ballsLogic.AddBalls(ballsAmount);
             ballsLogic.StartSimulation();
         }
 
-        internal void StopSimulation()
+        public void StopSimulation()
 		{
             ballsLogic.StopSimulation();
             ballsLogic = BallsLogicLayerAbstractApi.CreateBallsLogic(boardSize);
         }
 
-        internal void SetBallNumber(int amount)
+        public void SetBallNumber(int amount)
 		{
             ballsAmount = amount;
         }
 
-        internal int GetBallsCount()
+        public int GetBallsCount()
 		{
             return ballsAmount;
 		}
 
-        internal void OnBallPositionChange(OnPositionChangeEventArgs args)
+        public void OnBallPositionChange(OnPositionChangeEventArgs args)
         {
             BallPositionChange?.Invoke(this, args);
         }

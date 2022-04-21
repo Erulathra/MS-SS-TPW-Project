@@ -4,12 +4,13 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Input;
+using TPW.Presentation.Model;
 
 namespace TPW.Presentation.ViewModel
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        private Model.MainModel model;
+        private MainModel model;
 
         public int BallsCount
         {
@@ -30,7 +31,7 @@ namespace TPW.Presentation.ViewModel
 
         public MainViewModel()
         {
-            model = new Model.MainModel();
+            model = new MainModel();
             BallsCount = 5;
 
             IncreaseButton = new RelayCommand(() =>
