@@ -68,8 +68,8 @@ internal class LogicBallDecorator : ILogicBall
 	
 	private Vector2 GetRandomNormalizedVector()
 	{
-		var x = (float)rng.NextDouble();
-		var y = (float)rng.NextDouble();
+		var x = (float)(rng.NextDouble() - 0.5) * 2;
+		var y = (float)(rng.NextDouble() - 0.5) * 2;
 		var result = new Vector2(x, y);
 		return Vector2.Normalize(result);
 	}
