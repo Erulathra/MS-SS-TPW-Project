@@ -34,6 +34,8 @@ namespace TPW.Presentation.ViewModel
 
         public MainViewModel()
         {
+            Circles = new ObservableCollection<Vector2>();
+
             model = new MainModel();
             BallsCount = 5;
 
@@ -48,6 +50,17 @@ namespace TPW.Presentation.ViewModel
 
             StartSimulationButton = new RelayCommand(() =>
             {
+                model.SetBallNumber(BallsCount);
+
+                for (int i = 0; i < BallsCount; i++)
+                {
+                    Circles.Add(new Vector2());
+                }
+
+                model.BallPositionChange += (sender, argv) =>
+                {
+                    Circles[argv.ball.id] = argv.ball.Position;
+                };
                 model.StartSimulation();
             });
             StopSimulationButton = new RelayCommand(() =>
@@ -55,10 +68,7 @@ namespace TPW.Presentation.ViewModel
                 model.StopSimulation();
             });
 
-            Circles = new ObservableCollection<Vector2>();
 
-            //TODO: TEST
-            Circles.Add(new Vector2(50, 50));
         }
 
         // Event for View update

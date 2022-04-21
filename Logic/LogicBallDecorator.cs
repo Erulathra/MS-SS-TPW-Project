@@ -8,6 +8,7 @@ namespace TPW.Logic;
 public interface ILogicBall
 {
 	Vector2 Position { get; set; }
+	int id { get; }
 }
 
 internal class LogicBallDecorator : ILogicBall
@@ -17,17 +18,20 @@ internal class LogicBallDecorator : ILogicBall
 	private readonly BallsLogic owner;
 	private Random rng;
 	public event EventHandler<OnPositionChangeEventArgs>? PositionChange;
+	public int id { get; private set; }
 
-	public LogicBallDecorator(IBall ball, BallsLogic owner)
+	public LogicBallDecorator(IBall ball, int id, BallsLogic owner)
 	{
 		this.ball = ball;
 		this.owner = owner;
+		this.id = id;
 		rng = new Random();
 	}
 
-	public LogicBallDecorator(Vector2 position, BallsLogic owner)
+	public LogicBallDecorator(Vector2 position, int id, BallsLogic owner)
 	{
 		ball = BallsDataLayerAbstractApi.CreateBall(position);
+		this.id = id;
 		this.owner = owner;
 		rng = new Random();
 	}
@@ -38,7 +42,7 @@ internal class LogicBallDecorator : ILogicBall
 		set => ball.Position = value;
 	}
 
-	public async void Simulate()
+    public async void Simulate()
 	{
 		while (true)
 		{

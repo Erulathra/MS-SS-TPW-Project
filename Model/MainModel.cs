@@ -20,10 +20,10 @@ namespace TPW.Presentation.Model
             boardSize = new Vector2(650, 400);
             ballsAmount = 0;
             ballsLogic = BallsLogicLayerAbstractApi.CreateBallsLogic(boardSize);
-            /*ballsLogic.PositionChange += (sender, args) =>
+            ballsLogic.PositionChange += (sender, args) =>
             {
-                //move ball
-            }*/
+                BallPositionChange?.Invoke(this, args);
+            };
         }
         public void StartSimulation()
         {

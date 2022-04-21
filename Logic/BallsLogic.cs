@@ -62,7 +62,7 @@ internal class BallsLogic : BallsLogicLayerAbstractApi
 		CancelSimulationSource = new CancellationTokenSource();
 		for (var i = 0; i < dataBalls.GetBallCount(); i++)
 		{
-			var ball = new LogicBallDecorator(dataBalls.Get(i), this);
+			var ball = new LogicBallDecorator(dataBalls.Get(i), i, this);
 			ball.PositionChange += (sender, args) => OnPositionChange(args);
 			Task.Factory.StartNew(ball.Simulate, CancelSimulationSource.Token);
 		}
@@ -81,7 +81,7 @@ internal class BallsLogic : BallsLogicLayerAbstractApi
 	public override IList<ILogicBall> GetBalls()
 	{
 		var ballsList = new List<ILogicBall>();
-		for (var i = 0; i < dataBalls.GetBallCount(); i++) ballsList.Add(new LogicBallDecorator(dataBalls.Get(i), this));
+		for (var i = 0; i < dataBalls.GetBallCount(); i++) ballsList.Add(new LogicBallDecorator(dataBalls.Get(i), i, this));
 
 		return ballsList;
 	}
