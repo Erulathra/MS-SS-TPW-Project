@@ -29,6 +29,8 @@ namespace TPW.Presentation.ViewModel
                 }
             }
         }
+
+        private string debug
         public ICommand IncreaseButton { get; }
         public ICommand DecreaseButton { get; }
         public ICommand StartSimulationButton { get; }
@@ -179,15 +181,16 @@ public class AsyncObservableCollection<T> : ObservableCollection<T>
 
 public class BallPosition
 {
+    private Vector2 pos;
     public float X
     {
-        get { return X; }
-        set { X = value; }
+        get { return pos.X; }
+        set { pos.X = value; }
     }
     public float Y
     {
-        get { return Y; }
-        set { Y = value; }
+        get { return pos.Y; }
+        set { pos.Y = value; }
     }
 
     public BallPosition(float x, float y)
