@@ -9,6 +9,7 @@ namespace TPW.Logic;
 
 internal class BallsLogic : BallsLogicLayerAbstractApi
 {
+	public static readonly int BallRadius = 50;
 	private readonly BallsDataLayerAbstractApi dataBalls;
 	public CancellationTokenSource CancelSimulationSource { get; private set; }
 
@@ -37,14 +38,10 @@ internal class BallsLogic : BallsLogicLayerAbstractApi
 
 	private Vector2 GetRandomPointInsideBoard()
 	{
-		return GetRandomPoint(BoardSize);
-	}
-
-	private Vector2 GetRandomPoint(Vector2 maxSize)
-	{
 		var rng = new Random();
-		var x = (float)rng.NextDouble() * maxSize.X;
-		var y = (float)rng.NextDouble() * maxSize.Y;
+		var x = rng.Next(BallRadius, (int)(BoardSize.X - BallRadius));
+		var y = rng.Next(BallRadius, (int)(BoardSize.Y - BallRadius));
+
 		return new Vector2(x, y);
 	}
 
@@ -62,8 +59,8 @@ internal class BallsLogic : BallsLogicLayerAbstractApi
 		CancelSimulationSource = new CancellationTokenSource();
 		for (var i = 0; i < dataBalls.GetBallCount(); i++)
 		{
-			var ball = new LogicBallDecorator(dataBalls.Get(i), this);
-			ball.PositionChange += (sender, args) => OnPositionChange(args);
+			var ball = new LogicBallDecorator(dataBalls.Get(i), i, this);
+			ball.PositionChange += (_, args) => OnPositionChange(args);
 			Task.Factory.StartNew(ball.Simulate, CancelSimulationSource.Token);
 		}
 	}
@@ -81,7 +78,7 @@ internal class BallsLogic : BallsLogicLayerAbstractApi
 	public override IList<ILogicBall> GetBalls()
 	{
 		var ballsList = new List<ILogicBall>();
-		for (var i = 0; i < dataBalls.GetBallCount(); i++) ballsList.Add(new LogicBallDecorator(dataBalls.Get(i), this));
+		for (var i = 0; i < dataBalls.GetBallCount(); i++) ballsList.Add(new LogicBallDecorator(dataBalls.Get(i), i, this));
 
 		return ballsList;
 	}

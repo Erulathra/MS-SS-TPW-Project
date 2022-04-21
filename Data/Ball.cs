@@ -16,5 +16,9 @@ namespace TPW.Data
             this.Position = position;
         }
 
-    }
+		public override string ToString()
+		{
+			return $"({Position.X}, {Position.Y})";
+		}
+	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using System.Threading;
 using System.Threading.Tasks;
 using TPW.Data;
 
@@ -8,25 +9,31 @@ namespace TPW.Logic;
 public interface ILogicBall
 {
 	Vector2 Position { get; set; }
+	int Id { get; }
 }
 
 internal class LogicBallDecorator : ILogicBall
 {
-	private static readonly double BallRadius = 3.0;
 	private readonly IBall ball;
 	private readonly BallsLogic owner;
+	private Random rng;
 	public event EventHandler<OnPositionChangeEventArgs>? PositionChange;
+	public int Id { get; private set; }
 
-	public LogicBallDecorator(IBall ball, BallsLogic owner)
+	public LogicBallDecorator(IBall ball, int id, BallsLogic owner)
 	{
 		this.ball = ball;
 		this.owner = owner;
+		this.Id = id;
+		rng = new Random();
 	}
 
-	public LogicBallDecorator(Vector2 position, BallsLogic owner)
+	public LogicBallDecorator(Vector2 position, int id, BallsLogic owner)
 	{
 		ball = BallsDataLayerAbstractApi.CreateBall(position);
+		this.Id = id;
 		this.owner = owner;
+		rng = new Random();
 	}
 
 	public Vector2 Position
@@ -35,34 +42,40 @@ internal class LogicBallDecorator : ILogicBall
 		set => ball.Position = value;
 	}
 
-	public async void Simulate()
+    public async void Simulate()
 	{
-		while (true)
+		while (!owner.CancelSimulationSource.Token.IsCancellationRequested)
 		{
 			Position = GetRandomPointInsideBoard();
 			PositionChange?.Invoke(this, new OnPositionChangeEventArgs(this));
 
-			await Task.Delay(16, owner.CancelSimulationSource.Token).ContinueWith(tsk => { });
+			await Task.Delay(32, owner.CancelSimulationSource.Token).ContinueWith(_ => { });
 		}
 	}
 
 	private Vector2 GetRandomPointInsideBoard()
 	{
-		Vector2 newPosition;
-		do
-		{
-			newPosition = Position + GetRandomNormalizedVector();
-		} while (Position.X < BallRadius || Position.X > owner.BoardSize.X - BallRadius
-		                                 || Position.Y < BallRadius || Position.Y > owner.BoardSize.Y - BallRadius);
+		Vector2 translationVector = GetRandomNormalizedVector();
+		Vector2 newPosition = Position + translationVector;
 
-		return newPosition;
+		if(newPosition.X < BallsLogic.BallRadius || newPosition.X > owner.BoardSize.X - BallsLogic.BallRadius)
+        {
+			translationVector.X = - translationVector.X;
+        }
+
+		if (newPosition.Y < BallsLogic.BallRadius || newPosition.Y > owner.BoardSize.Y - BallsLogic.BallRadius)
+		{
+			translationVector.Y = - translationVector.Y;
+		}
+
+		return Position + translationVector;
 	}
 
+	
 	private Vector2 GetRandomNormalizedVector()
 	{
-		var rng = new Random();
-		var x = (float)rng.NextDouble();
-		var y = (float)rng.NextDouble();
+		var x = (float)(rng.NextDouble() - 0.5) * 2;
+		var y = (float)(rng.NextDouble() - 0.5) * 2;
 		var result = new Vector2(x, y);
 		return Vector2.Normalize(result);
 	}

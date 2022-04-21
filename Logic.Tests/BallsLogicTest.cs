@@ -7,7 +7,7 @@ namespace TPW.Logic.Tests;
 public class BallsLogicTest
 {
 	private BallsLogicLayerAbstractApi ballsLogic;
-	private readonly Vector2 boardSize = new Vector2(150, 50);
+	private readonly Vector2 boardSize = new Vector2(150, 100);
 
 	[SetUp]
 	public void SetUp()
@@ -52,7 +52,7 @@ public class BallsLogicTest
 			startPositionList.Add(ballsLogic.GetBalls()[i].Position);
 		}
 
-		ballsLogic.PositionChange += (sender, args) =>
+		ballsLogic.PositionChange += (_, _) =>
 		{
 			interactionCount++;
 			if (interactionCount >= 50)
@@ -61,7 +61,9 @@ public class BallsLogicTest
 			}
 		};
 		ballsLogic.StartSimulation();
-		while (interactionCount < 55) ;
+		while (interactionCount < 55)
+		{ }
+
 		Assert.GreaterOrEqual(interactionCount, 50);
 		for (int i = 0; i < ballsLogic.GetBallsCount(); i++)
 		{
