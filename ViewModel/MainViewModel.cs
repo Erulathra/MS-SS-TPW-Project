@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Input;
@@ -11,6 +13,7 @@ namespace TPW.Presentation.ViewModel
     public class MainViewModel : INotifyPropertyChanged
     {
         private MainModel model;
+        public ObservableCollection<Vector2> Circles { get; set; }
 
         public int BallsCount
         {
@@ -51,6 +54,11 @@ namespace TPW.Presentation.ViewModel
             {
                 model.StopSimulation();
             });
+
+            Circles = new ObservableCollection<Vector2>();
+
+            //TODO: TEST
+            Circles.Add(new Vector2(50, 50));
         }
 
         // Event for View update

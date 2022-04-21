@@ -12,7 +12,7 @@ public interface ILogicBall
 
 internal class LogicBallDecorator : ILogicBall
 {
-	private static readonly double BallRadius = 3.0;
+	private static readonly double BallRadius = 50;
 	private readonly IBall ball;
 	private readonly BallsLogic owner;
 	private Random rng;
