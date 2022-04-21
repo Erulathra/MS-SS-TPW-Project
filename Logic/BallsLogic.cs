@@ -42,7 +42,7 @@ internal class BallsLogic : BallsLogicLayerAbstractApi
 		var x = rng.Next(BallRadius, (int)(BoardSize.X - BallRadius));
 		var y = rng.Next(BallRadius, (int)(BoardSize.Y - BallRadius));
 
-		return new Vector2((float)x, (float)y);
+		return new Vector2(x, y);
 	}
 
 	public override void AddBall(Vector2 position)
@@ -60,7 +60,7 @@ internal class BallsLogic : BallsLogicLayerAbstractApi
 		for (var i = 0; i < dataBalls.GetBallCount(); i++)
 		{
 			var ball = new LogicBallDecorator(dataBalls.Get(i), i, this);
-			ball.PositionChange += (sender, args) => OnPositionChange(args);
+			ball.PositionChange += (_, args) => OnPositionChange(args);
 			Task.Factory.StartNew(ball.Simulate, CancelSimulationSource.Token);
 		}
 	}

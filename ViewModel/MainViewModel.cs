@@ -5,7 +5,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
 using System.Windows.Input;
 using TPW.Presentation.Model;
@@ -66,7 +65,7 @@ namespace TPW.Presentation.ViewModel
                 model.BallPositionChange += (sender, argv) =>
                 {
                     if(Circles.Count > 0)
-                        Circles[argv.ball.id].ChangePosition(argv.ball.Position);
+                        Circles[argv.Ball.Id].ChangePosition(argv.Ball.Position);
                 };
                 model.StartSimulation();
             });
@@ -107,23 +106,23 @@ public class DebugString : INotifyPropertyChanged
 
 public class RelayCommand : ICommand
 {
-    private readonly Action _handler;
-    private bool _isEnabled;
+    private readonly Action handler;
+    private bool isEnabled;
 
     public RelayCommand(Action handler)
     {
-        _handler = handler;
+        this.handler = handler;
         IsEnabled = true;
     }
 
     public bool IsEnabled
     {
-        get { return _isEnabled; }
+        get { return isEnabled; }
         set
         {
-            if (value != _isEnabled)
+            if (value != isEnabled)
             {
-                _isEnabled = value;
+                isEnabled = value;
                 if (CanExecuteChanged != null)
                 {
                     CanExecuteChanged(this, EventArgs.Empty);
@@ -141,7 +140,7 @@ public class RelayCommand : ICommand
 
     public void Execute(object parameter)
     {
-        _handler();
+        handler();
     }
 }
 

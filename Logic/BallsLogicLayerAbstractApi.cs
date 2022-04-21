@@ -7,11 +7,11 @@ namespace TPW.Logic;
 
 public class OnPositionChangeEventArgs : EventArgs
 {
-	public ILogicBall ball;
+	public readonly ILogicBall Ball;
 
 	public OnPositionChangeEventArgs(ILogicBall ball)
 	{
-		this.ball = ball;
+		this.Ball = ball;
 	}
 }
 

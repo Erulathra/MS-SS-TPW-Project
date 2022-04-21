@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Numerics;
-using System.Text;
-
 using TPW.Logic;
 
 namespace TPW.Presentation.Model
 {
     public class MainModel
     {
-        private Vector2 boardSize;
+        private readonly Vector2 boardSize;
         private int ballsAmount;
         private BallsLogicLayerAbstractApi ballsLogic;
 

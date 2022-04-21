@@ -3,8 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TPW.Presentation.View"
-		xmlns:vm="clr-namespace:TPW.Presentation.ViewModel;assembly=ViewModel"
+        xmlns:vm="clr-namespace:TPW.Presentation.ViewModel;assembly=ViewModel"
         mc:Ignorable="d"
 		
         Title="MainView"
@@ -43,8 +42,8 @@
 				</ItemsControl.ItemTemplate>
 			</ItemsControl-->
 		</StackPanel>
-        <StackPanel VerticalAlignment="Center">
-            <Canvas x:Name="ballCanvas" Height="400" Width="650">
+        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+            <Canvas x:Name="BallCanvas" Height="400" Width="650">
                 <Border BorderBrush="White" BorderThickness="1" Height="400" Width="650"/>
                 
                 <ItemsControl ItemsSource="{Binding Path = Circles}">
