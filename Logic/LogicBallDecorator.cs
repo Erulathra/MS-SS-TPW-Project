@@ -55,12 +55,17 @@ internal class LogicBallDecorator : ILogicBall
 
 	private Vector2 GetRandomPointInsideBoard()
 	{
-		Vector2 newPosition;
-		do
+		Vector2 newPosition = Position + GetRandomNormalizedVector();
+
+		if(Position.X < BallRadius || Position.X > owner.BoardSize.X - BallRadius)
+        {
+			newPosition.X = - newPosition.X;
+        }
+
+		if (Position.Y < BallRadius || Position.Y > owner.BoardSize.Y - BallRadius)
 		{
-			newPosition = Position + GetRandomNormalizedVector();
-		} while (Position.X < BallRadius || Position.X > owner.BoardSize.X - BallRadius
-		                                 || Position.Y < BallRadius || Position.Y > owner.BoardSize.Y - BallRadius);
+			newPosition.Y = -newPosition.Y;
+		}
 
 		return newPosition;
 	}
