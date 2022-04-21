@@ -12,7 +12,8 @@
 		Background="#222" Foreground="AliceBlue"
 		FontSize="14"
         d:DesignHeight="450"
-        d:DesignWidth="800">
+        d:DesignWidth="800"
+        ResizeMode="NoResize">
 
     <Window.DataContext>
         <vm:MainViewModel/>
