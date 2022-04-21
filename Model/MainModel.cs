@@ -2,6 +2,18 @@
 using System.Numerics;
 using TPW.Logic;
 
+public class OnPositionChangeUiAdapterEventArgs : EventArgs
+{
+	public readonly Vector2 Position;
+    public readonly int Id;
+
+    public OnPositionChangeUiAdapterEventArgs(Vector2 position, int id)
+    {
+        this.Position = position;
+        Id = id;
+    }
+}
+
 namespace TPW.Presentation.Model
 {
     public class MainModel
@@ -10,7 +22,7 @@ namespace TPW.Presentation.Model
         private int ballsAmount;
         private BallsLogicLayerAbstractApi ballsLogic;
 
-        public event EventHandler<OnPositionChangeEventArgs>? BallPositionChange;
+        public event EventHandler<OnPositionChangeUiAdapterEventArgs>? BallPositionChange;
 
         public MainModel()
         {
@@ -19,7 +31,7 @@ namespace TPW.Presentation.Model
             ballsLogic = BallsLogicLayerAbstractApi.CreateBallsLogic(boardSize);
             ballsLogic.PositionChange += (sender, args) =>
             {
-                BallPositionChange?.Invoke(this, args);
+                BallPositionChange?.Invoke(this, new OnPositionChangeUiAdapterEventArgs(args.Ball.Position, args.Ball.Id));
             };
         }
         public void StartSimulation()
@@ -34,7 +46,7 @@ namespace TPW.Presentation.Model
             ballsLogic = BallsLogicLayerAbstractApi.CreateBallsLogic(boardSize);
             ballsLogic.PositionChange += (sender, args) =>
             {
-                BallPositionChange?.Invoke(this, args);
+                BallPositionChange?.Invoke(this, new OnPositionChangeUiAdapterEventArgs(args.Ball.Position, args.Ball.Id));
             };
         }
 
@@ -48,7 +60,7 @@ namespace TPW.Presentation.Model
             return ballsAmount;
 		}
 
-        public void OnBallPositionChange(OnPositionChangeEventArgs args)
+        public void OnBallPositionChange(OnPositionChangeUiAdapterEventArgs args)
         {
             BallPositionChange?.Invoke(this, args);
         }

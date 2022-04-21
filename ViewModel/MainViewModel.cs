@@ -62,7 +62,7 @@ namespace TPW.Presentation.ViewModel
                 model.BallPositionChange += (sender, argv) =>
                 {
                     if(Circles.Count > 0)
-                        Circles[argv.Ball.Id].ChangePosition(argv.Ball.Position);
+                        Circles[argv.Id].ChangePosition(argv.Position);
                 };
                 model.StartSimulation();
             });
