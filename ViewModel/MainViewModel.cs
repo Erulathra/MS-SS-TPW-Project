@@ -58,13 +58,6 @@ namespace TPW.Presentation.ViewModel
             {
                 model.SetBallNumber(BallsCount);
 
-                //DEBUG
-                /*DebugTxt = new ObservableCollection<DebugString>();
-                for (int i = 0; i < BallsCount; i++)
-                {
-                    DebugTxt.Add(new DebugString());
-                }*/
-
                 for (int i = 0; i < BallsCount; i++)
                 {
                     Circles.Add(new BallPosition());
@@ -74,8 +67,6 @@ namespace TPW.Presentation.ViewModel
                 {
                     if(Circles.Count > 0)
                         Circles[argv.ball.id].ChangePosition(argv.ball.Position);
-                    // DEBUG
-                    //DebugTxt[argv.ball.id].Value = argv.ball.id + ": " + Circles[argv.ball.id].ToString();
                 };
                 model.StartSimulation();
             });

@@ -7,7 +7,7 @@ namespace TPW.Logic.Tests;
 public class BallsLogicTest
 {
 	private BallsLogicLayerAbstractApi ballsLogic;
-	private readonly Vector2 boardSize = new Vector2(150, 50);
+	private readonly Vector2 boardSize = new Vector2(150, 100);
 
 	[SetUp]
 	public void SetUp()

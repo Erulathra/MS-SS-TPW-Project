@@ -51,7 +51,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate >
                             <Canvas>
-                                <Ellipse Width="50" Height="50" Fill="White" Stroke="Black" StrokeThickness="2">
+                                <Ellipse Width="40" Height="40" Fill="White" Stroke="Black" StrokeThickness="1">
                                     <Ellipse.RenderTransform>
                                         <TranslateTransform X="{Binding X}" Y="{Binding Y}"/>
                                     </Ellipse.RenderTransform>

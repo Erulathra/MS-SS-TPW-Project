@@ -13,7 +13,6 @@ public interface ILogicBall
 
 internal class LogicBallDecorator : ILogicBall
 {
-	private static readonly double BallRadius = 50;
 	private readonly IBall ball;
 	private readonly BallsLogic owner;
 	private Random rng;
@@ -49,25 +48,26 @@ internal class LogicBallDecorator : ILogicBall
 			Position = GetRandomPointInsideBoard();
 			PositionChange?.Invoke(this, new OnPositionChangeEventArgs(this));
 
-			await Task.Delay(16, owner.CancelSimulationSource.Token).ContinueWith(tsk => { });
+			await Task.Delay(32, owner.CancelSimulationSource.Token).ContinueWith(tsk => { });
 		}
 	}
 
 	private Vector2 GetRandomPointInsideBoard()
 	{
-		Vector2 newPosition = Position + GetRandomNormalizedVector();
+		Vector2 translationVector = GetRandomNormalizedVector();
+		Vector2 newPosition = Position + translationVector;
 
-		if(Position.X < BallRadius || Position.X > owner.BoardSize.X - BallRadius)
+		if(newPosition.X < BallsLogic.BallRadius || newPosition.X > owner.BoardSize.X - BallsLogic.BallRadius)
         {
-			newPosition.X = - newPosition.X;
+			translationVector.X = - translationVector.X;
         }
 
-		if (Position.Y < BallRadius || Position.Y > owner.BoardSize.Y - BallRadius)
+		if (newPosition.Y < BallsLogic.BallRadius || newPosition.Y > owner.BoardSize.Y - BallsLogic.BallRadius)
 		{
-			newPosition.Y = -newPosition.Y;
+			translationVector.Y = - translationVector.Y;
 		}
 
-		return newPosition;
+		return Position + translationVector;
 	}
 
 	

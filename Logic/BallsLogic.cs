@@ -9,6 +9,7 @@ namespace TPW.Logic;
 
 internal class BallsLogic : BallsLogicLayerAbstractApi
 {
+	public static readonly int BallRadius = 50;
 	private readonly BallsDataLayerAbstractApi dataBalls;
 	public CancellationTokenSource CancelSimulationSource { get; private set; }
 
@@ -37,15 +38,11 @@ internal class BallsLogic : BallsLogicLayerAbstractApi
 
 	private Vector2 GetRandomPointInsideBoard()
 	{
-		return GetRandomPoint(BoardSize);
-	}
-
-	private Vector2 GetRandomPoint(Vector2 maxSize)
-	{
 		var rng = new Random();
-		var x = (float)rng.NextDouble() * maxSize.X;
-		var y = (float)rng.NextDouble() * maxSize.Y;
-		return new Vector2(x, y);
+		var x = rng.Next(BallRadius, (int)(BoardSize.X - BallRadius));
+		var y = rng.Next(BallRadius, (int)(BoardSize.Y - BallRadius));
+
+		return new Vector2((float)x, (float)y);
 	}
 
 	public override void AddBall(Vector2 position)
