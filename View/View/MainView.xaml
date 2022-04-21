@@ -34,14 +34,14 @@
                     Command="{Binding StartSimulationButton}"/>
 			<Button Content="Stop" HorizontalAlignment="Center" VerticalAlignment="Center"
                     Command="{Binding StopSimulationButton}"/>
-			<ItemsControl ItemsSource="{Binding Path = DebugTxt}">
+			<!--ItemsControl ItemsSource="{Binding Path = DebugTxt}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate >
 						<Label HorizontalContentAlignment="Center" 
 				               Content="{Binding Value}" />
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
-			</ItemsControl>
+			</ItemsControl-->
 		</StackPanel>
         <StackPanel VerticalAlignment="Center">
             <Canvas x:Name="ballCanvas" Height="400" Width="650">

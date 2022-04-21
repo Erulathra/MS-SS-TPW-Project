@@ -31,7 +31,7 @@ namespace TPW.Presentation.ViewModel
         }
 
         // DEBUG
-        public ObservableCollection<DebugString> DebugTxt { get; set; }
+        //public ObservableCollection<DebugString> DebugTxt { get; set; }
 
         public ICommand IncreaseButton { get; }
         public ICommand DecreaseButton { get; }
@@ -59,11 +59,11 @@ namespace TPW.Presentation.ViewModel
                 model.SetBallNumber(BallsCount);
 
                 //DEBUG
-                DebugTxt = new ObservableCollection<DebugString>();
+                /*DebugTxt = new ObservableCollection<DebugString>();
                 for (int i = 0; i < BallsCount; i++)
                 {
                     DebugTxt.Add(new DebugString());
-                }
+                }*/
 
                 for (int i = 0; i < BallsCount; i++)
                 {
@@ -72,9 +72,10 @@ namespace TPW.Presentation.ViewModel
 
                 model.BallPositionChange += (sender, argv) =>
                 {
-                    Circles[argv.ball.id]?.ChangePosition(argv.ball.Position);
+                    if(Circles.Count > 0)
+                        Circles[argv.ball.id].ChangePosition(argv.ball.Position);
                     // DEBUG
-                    DebugTxt[argv.ball.id].Value = argv.ball.id + ": " + Circles[argv.ball.id].ToString();
+                    //DebugTxt[argv.ball.id].Value = argv.ball.id + ": " + Circles[argv.ball.id].ToString();
                 };
                 model.StartSimulation();
             });
