@@ -32,9 +32,17 @@
                     Command="{Binding DecreaseButton}"/>
             <Button Content="Start" HorizontalAlignment="Center" VerticalAlignment="Center"
                     Command="{Binding StartSimulationButton}"/>
-            <Button Content="Stop" HorizontalAlignment="Center" VerticalAlignment="Center"
+			<Button Content="Stop" HorizontalAlignment="Center" VerticalAlignment="Center"
                     Command="{Binding StopSimulationButton}"/>
-        </StackPanel>
+			<ItemsControl ItemsSource="{Binding Path = DebugTxt}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate >
+						<Label HorizontalContentAlignment="Center" 
+				               Content="{Binding Value}" />
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</StackPanel>
         <StackPanel VerticalAlignment="Center">
             <Canvas x:Name="ballCanvas" Height="400" Width="650">
                 <Border BorderBrush="White" BorderThickness="1" Height="400" Width="650"/>
