@@ -32,6 +32,10 @@ namespace TPW.Presentation.Model
 		{
             ballsLogic.StopSimulation();
             ballsLogic = BallsLogicLayerAbstractApi.CreateBallsLogic(boardSize);
+            ballsLogic.PositionChange += (sender, args) =>
+            {
+                BallPositionChange?.Invoke(this, args);
+            };
         }
 
         public void SetBallNumber(int amount)

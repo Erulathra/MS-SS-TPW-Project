@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using System.Threading;
 using System.Threading.Tasks;
 using TPW.Data;
 
@@ -43,7 +44,7 @@ internal class LogicBallDecorator : ILogicBall
 
     public async void Simulate()
 	{
-		while (true)
+		while (!owner.CancelSimulationSource.Token.IsCancellationRequested)
 		{
 			Position = GetRandomPointInsideBoard();
 			PositionChange?.Invoke(this, new OnPositionChangeEventArgs(this));

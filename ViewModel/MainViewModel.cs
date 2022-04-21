@@ -69,11 +69,13 @@ namespace TPW.Presentation.ViewModel
                 };
                 model.StartSimulation();
             });
+
             StopSimulationButton = new RelayCommand(() =>
             {
                 model.StopSimulation();
                 Circles.Clear();
                 model.SetBallNumber(BallsCount);
+
             });
         }
 
