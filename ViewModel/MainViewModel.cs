@@ -29,9 +29,6 @@ namespace TPW.Presentation.ViewModel
             }
         }
 
-        // DEBUG
-        //public ObservableCollection<DebugString> DebugTxt { get; set; }
-
         public ICommand IncreaseButton { get; }
         public ICommand DecreaseButton { get; }
         public ICommand StartSimulationButton { get; }
@@ -85,23 +82,6 @@ namespace TPW.Presentation.ViewModel
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(caller));
         }
-    }
-}
-
-//DEBUG
-public class DebugString : INotifyPropertyChanged
-{
-    private string _Value;
-    public string Value
-    {
-        get { return _Value; }
-        set { _Value = value; OnPropertyChanged("Value"); }
-    }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-    protected virtual void OnPropertyChanged([CallerMemberName] string caller = "")
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(caller));
     }
 }
 
