@@ -58,12 +58,12 @@ internal class LogicBallDecorator : ILogicBall
 		Vector2 translationVector = GetRandomNormalizedVector();
 		Vector2 newPosition = Position + translationVector;
 
-		if(newPosition.X < BallsLogic.BallRadius || newPosition.X > owner.BoardSize.X - BallsLogic.BallRadius)
+		if(newPosition.X < 0 || newPosition.X > owner.BoardSize.X - BallsLogic.BallRadius)
         {
 			translationVector.X = - translationVector.X;
         }
 
-		if (newPosition.Y < BallsLogic.BallRadius || newPosition.Y > owner.BoardSize.Y - BallsLogic.BallRadius)
+		if (newPosition.Y < 0 || newPosition.Y > owner.BoardSize.Y - BallsLogic.BallRadius)
 		{
 			translationVector.Y = - translationVector.Y;
 		}

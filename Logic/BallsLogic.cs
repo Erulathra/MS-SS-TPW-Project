@@ -39,8 +39,8 @@ internal class BallsLogic : BallsLogicLayerAbstractApi
 	private Vector2 GetRandomPointInsideBoard()
 	{
 		var rng = new Random();
-		var x = rng.Next(BallRadius, (int)(BoardSize.X - BallRadius));
-		var y = rng.Next(BallRadius, (int)(BoardSize.Y - BallRadius));
+		var x = rng.Next(25, (int)(BoardSize.X - BallRadius));
+		var y = rng.Next(25, (int)(BoardSize.Y - BallRadius));
 
 		return new Vector2(x, y);
 	}
