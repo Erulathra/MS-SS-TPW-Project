@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Transactions;
 
 namespace TPW.Data
 {
@@ -6,7 +7,7 @@ namespace TPW.Data
     {
         private readonly List<IBall> ballsList;
 
-        public BallsList()
+        public BallsList() : base()
         {
             this.ballsList = new List<IBall>();
         }
