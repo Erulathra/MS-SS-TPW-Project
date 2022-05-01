@@ -59,7 +59,7 @@ internal class Ball : IBall
          Position += Vector2.Multiply(Velocity, deltaTime);
          PositionChange?.Invoke(this, new OnPositionChangeEventArgs(this));
          
-			await Task.Delay(32, owner.CancelSimulationSource.Token).ContinueWith(_ => { });
+			await Task.Delay(16, owner.CancelSimulationSource.Token).ContinueWith(_ => { });
          // Delta time calculation
          sw.Stop();
          deltaTime = sw.ElapsedMilliseconds / 1000f;

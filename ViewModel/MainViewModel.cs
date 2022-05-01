@@ -6,6 +6,7 @@ using TPW.Presentation.Model;
 
 namespace TPW.Presentation.ViewModel
 {
+   //TODO: Michalina - When simulation is started, disable star simulation button.
    sealed public class MainViewModel : INotifyPropertyChanged
    {
       private readonly MainModel model;

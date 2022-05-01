@@ -7,8 +7,8 @@ namespace TPW.Data;
 
 internal class BallsList : BallsDataLayerAbstractApi
 {
-   private const int MaxSpeed = 50;
-   private const int MinSpeed = 20;
+   private const int MaxStartSpeed = 200;
+   private const int MinStartSpeed = -200;
    private readonly List<IBall> ballsList;
 
    public BallsList(Vector2 boardSize) : base(boardSize)
@@ -36,17 +36,44 @@ internal class BallsList : BallsDataLayerAbstractApi
    private Vector2 GetRandomPointInsideBoard(int ballRadius)
    {
       var rng = new Random();
-      var x = rng.Next(ballRadius, (int)(boardSize.X - ballRadius));
-      var y = rng.Next(ballRadius, (int)(boardSize.Y - ballRadius));
+      var isPositionCorrect = false;
+      var x = 0;
+      var y = 0;
+      while (!isPositionCorrect)
+      {
+         x = rng.Next(ballRadius, (int)(boardSize.X - ballRadius));
+         y = rng.Next(ballRadius, (int)(boardSize.Y - ballRadius));
 
+         isPositionCorrect = this.CheckIsSpaceFree(new Vector2(x, y), ballRadius);
+      }
       return new Vector2(x, y);
+   }
+
+   private bool CheckIsSpaceFree(Vector2 position, int ballRadius)
+   {
+      foreach (var ball in ballsList)
+      {
+         if (this.IsCirclesCollides(ball.Position, ball.Radius, position, ballRadius))
+         {
+            return false;
+         }
+      }
+
+      return true;
+   }
+
+   private bool IsCirclesCollides(Vector2 position1, float radius1, Vector2 position2, float radius2)
+   {
+      var distSq = (position1.X - position2.X) * (position1.X - position2.X) + (position1.Y - position2.Y) * (position1.Y - position2.Y);
+      var radSumSq = (radius1 + radius2) * (radius1 + radius2);
+      return distSq <= radSumSq;
    }
 
    private Vector2 GetRandomVelocity()
    {
       var rng = new Random();
-      var x = rng.Next(MinSpeed, MaxSpeed);
-      var y = rng.Next(MinSpeed, MaxSpeed);
+      var x = rng.Next(MinStartSpeed, MaxStartSpeed);
+      var y = rng.Next(MinStartSpeed, MaxStartSpeed);
 
       return new Vector2(x, y);
    }
