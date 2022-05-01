@@ -43,7 +43,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate >
                             <Canvas>
-                                <Ellipse Width="40" Height="40" Fill="#8a2be2" Stroke="#707070" StrokeThickness="2">
+                                <Ellipse Width="{Binding Radius}" Height="{Binding Radius}" Fill="#8a2be2" Stroke="#707070" StrokeThickness="2">
                                     <Ellipse.RenderTransform>
                                         <TranslateTransform X="{Binding X}" Y="{Binding Y}"/>
                                     </Ellipse.RenderTransform>

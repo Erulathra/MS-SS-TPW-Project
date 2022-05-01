@@ -52,7 +52,7 @@ internal class Ball : IBall
    {
       var sw = new Stopwatch();
       var deltaTime = 0f;
-      while (owner.CancelSimulationSource.Token.IsCancellationRequested)
+      while (!owner.CancelSimulationSource.Token.IsCancellationRequested)
       {
          sw.Start();
 

@@ -27,7 +27,7 @@ public abstract class BallsDataLayerAbstractApi
    public abstract void StartSimulation();
    public abstract void StopSimulation();
 
-   public static BallsDataLayerAbstractApi CreateBallsList(Vector2 boardSize)
+   public static BallsDataLayerAbstractApi? CreateBallsList(Vector2 boardSize)
    {
       return new BallsList(boardSize);
    }
