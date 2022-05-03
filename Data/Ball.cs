@@ -4,15 +4,6 @@ using System.Numerics;
 using System.Threading.Tasks;
 
 namespace TPW.Data;
-public class OnPositionChangeEventArgs : EventArgs
-{
-   public readonly IBall Ball;
-
-   public OnPositionChangeEventArgs(IBall ball)
-   {
-      this.Ball = ball;
-   }
-}
 
 public interface IBall
 {
