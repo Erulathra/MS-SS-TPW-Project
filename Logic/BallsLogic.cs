@@ -1,4 +1,5 @@
-﻿using TPW.Data;
+﻿using System.Collections.Generic;
+using TPW.Data;
 
 namespace TPW.Logic;
 
@@ -18,9 +19,13 @@ internal class BallsLogic : BallsLogicLayerAbstractApi
 
    public override void StartSimulation()
    {
-      dataBalls.PositionChange += (_, argv) =>
+      dataBalls.PositionChange += (_, args) =>
       {
-         this.OnPositionChange(new OnPositionChangeEventArgs(new LogicBallAdapter(argv.Ball)));
+         IList<ILogicBall> logicBallList = new List<ILogicBall>();
+         foreach (var ball in args.Balls)
+            logicBallList.Add(new LogicBallAdapter(ball));
+       
+         this.OnPositionChange(new OnPositionChangeEventArgs(new LogicBallAdapter(args.SenderBall), logicBallList));
       };
       dataBalls.StartSimulation();
    }

@@ -36,12 +36,15 @@ namespace TPW.Presentation.ViewModel
                Circles.Add(new ViewModelBallDecorator());
             }
 
-            model.BallPositionChange += (sender, argv) =>
+            model.BallPositionChange += (sender, args) =>
             {
                if (Circles.Count <= 0) return;
 
-               Circles[argv.Id].Position = argv.Position;
-               Circles[argv.Id].Radius = argv.Radius;
+               for (var i = 0; i < BallsCount; i++)
+               {
+                  Circles[args.SenderBall.ID].Position = args.SenderBall.Position;
+                  Circles[args.SenderBall.ID].Radius = args.SenderBall.Radius;
+               }
             };
             model.StartSimulation();
          });

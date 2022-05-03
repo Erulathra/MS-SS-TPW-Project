@@ -5,17 +5,26 @@ using System.Threading.Tasks;
 
 namespace TPW.Data;
 
+public class OnBallPositionChangeEventArgs
+   {
+      public IBall Ball;
+
+      public OnBallPositionChangeEventArgs(IBall ball)
+      {
+         this.Ball = ball;
+      }
+   }
 public interface IBall
 {
    Vector2 Position { get; }
    float Radius { get; }
    float Weight { get; }
    Vector2 Velocity { get; }
-   
+
    int ID { get; }
    public void Simulate();
 
-   public event EventHandler<OnPositionChangeEventArgs>? PositionChange;
+   public event EventHandler<OnBallPositionChangeEventArgs>? PositionChange;
 }
 
 internal class Ball : IBall
@@ -33,11 +42,11 @@ internal class Ball : IBall
    }
 
    public Vector2 Position { get; private set; }
-   public float Radius { get; private set; }
-   public float Weight { get; private set; }
-   public Vector2 Velocity { get; private set; }
+   public float Radius { get; }
+   public float Weight { get; }
+   public Vector2 Velocity { get; }
    public int ID { get; }
-   public event EventHandler<OnPositionChangeEventArgs>? PositionChange;
+   public event EventHandler<OnBallPositionChangeEventArgs>? PositionChange;
 
    public async void Simulate()
    {
@@ -48,13 +57,15 @@ internal class Ball : IBall
          sw.Start();
 
          Position += Vector2.Multiply(Velocity, deltaTime);
-         PositionChange?.Invoke(this, new OnPositionChangeEventArgs(this));
-         
-			await Task.Delay(16, owner.CancelSimulationSource.Token).ContinueWith(_ => { });
+         PositionChange?.Invoke(this, new OnBallPositionChangeEventArgs(this));
+
+         await Task.Delay(16, owner.CancelSimulationSource.Token).ContinueWith(_ => { });
          // Delta time calculation
          sw.Stop();
          deltaTime = sw.ElapsedMilliseconds / 1000f;
          sw.Reset();
       }
    }
+   
+   
 }

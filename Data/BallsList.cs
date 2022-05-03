@@ -87,9 +87,9 @@ internal class BallsList : BallsDataLayerAbstractApi
 
       foreach (var ball in ballsList)
       {
-         ball.PositionChange += (_, argv) =>
+         ball.PositionChange += (_, args) =>
          {
-            this.OnPositionChange(argv);
+            this.OnPositionChange(new OnPositionChangeEventArgs(args.Ball, new List<IBall>(ballsList)));
          };
 
          Task.Factory.StartNew(ball.Simulate, CancelSimulationSource.Token);

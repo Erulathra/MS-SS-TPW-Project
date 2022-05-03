@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TPW.Data;
 
 public class OnPositionChangeEventArgs : EventArgs
 {
-   public readonly IBall Ball;
+   public readonly IList<IBall> Balls;
+   public readonly IBall SenderBall;
 
-   public OnPositionChangeEventArgs(IBall ball)
+   public OnPositionChangeEventArgs(IBall senderBall, IList<IBall> balls)
    {
-      this.Ball = ball;
+      this.Balls = balls;
+      this.SenderBall = senderBall;
    }
 }
