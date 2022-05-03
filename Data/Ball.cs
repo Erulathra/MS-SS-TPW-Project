@@ -19,7 +19,7 @@ public interface IBall
    Vector2 Position { get; }
    float Radius { get; }
    float Weight { get; }
-   Vector2 Velocity { get; }
+   Vector2 Velocity { get; set; }
 
    int ID { get; }
    public void Simulate();
@@ -44,7 +44,7 @@ internal class Ball : IBall
    public Vector2 Position { get; private set; }
    public float Radius { get; }
    public float Weight { get; }
-   public Vector2 Velocity { get; }
+   public Vector2 Velocity { get; set; }
    public int ID { get; }
    public event EventHandler<OnBallPositionChangeEventArgs>? PositionChange;
 
@@ -56,16 +56,30 @@ internal class Ball : IBall
       {
          sw.Start();
 
-         Position += Vector2.Multiply(Velocity, deltaTime);
+         var nextPosition = Position + Vector2.Multiply(Velocity, deltaTime);
+         Position = this.ClampPosition(nextPosition);
+         
          PositionChange?.Invoke(this, new OnBallPositionChangeEventArgs(this));
 
-         await Task.Delay(16, owner.CancelSimulationSource.Token).ContinueWith(_ => { });
+         await Task.Delay(8, owner.CancelSimulationSource.Token).ContinueWith(_ => { });
          // Delta time calculation
          sw.Stop();
          deltaTime = sw.ElapsedMilliseconds / 1000f;
          sw.Reset();
       }
    }
-   
-   
+
+   private Vector2 ClampPosition(Vector2 nextPosition)
+   {
+      if (nextPosition.X < 0)
+         nextPosition.X = -1;
+      if (Radius + nextPosition.X > owner.BoardSize.X)
+         nextPosition.X = owner.BoardSize.X - Radius + 1;
+
+      if (nextPosition.Y < 0)
+         nextPosition.Y = -1;
+      if (Radius + nextPosition.Y > owner.BoardSize.Y)
+         nextPosition.Y = owner.BoardSize.Y - Radius + 1;
+      return nextPosition;
+   }
 }

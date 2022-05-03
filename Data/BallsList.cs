@@ -7,8 +7,8 @@ namespace TPW.Data;
 
 internal class BallsList : BallsDataLayerAbstractApi
 {
-   private const int MaxStartSpeed = 200;
-   private const int MinStartSpeed = -200;
+   private const int MaxStartSpeed = 500;
+   private const int MinStartSpeed = 200;
    private readonly List<IBall> ballsList;
 
    public BallsList(Vector2 boardSize) : base(boardSize)
@@ -41,8 +41,8 @@ internal class BallsList : BallsDataLayerAbstractApi
       var y = 0;
       while (!isPositionCorrect)
       {
-         x = rng.Next(ballRadius, (int)(boardSize.X - ballRadius));
-         y = rng.Next(ballRadius, (int)(boardSize.Y - ballRadius));
+         x = rng.Next(ballRadius, (int)(BoardSize.X - ballRadius));
+         y = rng.Next(ballRadius, (int)(BoardSize.Y - ballRadius));
 
          isPositionCorrect = this.CheckIsSpaceFree(new Vector2(x, y), ballRadius);
       }
@@ -72,8 +72,12 @@ internal class BallsList : BallsDataLayerAbstractApi
    private Vector2 GetRandomVelocity()
    {
       var rng = new Random();
-      var x = rng.Next(MinStartSpeed, MaxStartSpeed);
-      var y = rng.Next(MinStartSpeed, MaxStartSpeed);
+      var x = rng.Next(-MaxStartSpeed, MaxStartSpeed);
+      var y = rng.Next(-MaxStartSpeed, MaxStartSpeed);
+      if (Math.Abs(x) < MinStartSpeed)
+         x = MinStartSpeed;
+      if (Math.Abs(y) < MinStartSpeed)
+         y = MinStartSpeed;
 
       return new Vector2(x, y);
    }

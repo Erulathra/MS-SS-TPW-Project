@@ -24,6 +24,8 @@ internal class BallsLogic : BallsLogicLayerAbstractApi
          IList<ILogicBall> logicBallList = new List<ILogicBall>();
          foreach (var ball in args.Balls)
             logicBallList.Add(new LogicBallAdapter(ball));
+         
+         CollisionHandler.CollideWithWalls(args.SenderBall, dataBalls.BoardSize);
        
          this.OnPositionChange(new OnPositionChangeEventArgs(new LogicBallAdapter(args.SenderBall), logicBallList));
       };

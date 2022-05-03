@@ -8,13 +8,13 @@ public abstract class BallsDataLayerAbstractApi
 {
    protected BallsDataLayerAbstractApi(Vector2 boardSize)
    {
-      this.boardSize = boardSize;
+      this.BoardSize = boardSize;
       CancelSimulationSource = new CancellationTokenSource();
    }
 
    public CancellationTokenSource CancelSimulationSource { get; }
 
-   protected Vector2 boardSize; 
+   public Vector2 BoardSize { get; protected set; } 
    public abstract void Add(int howMany);
 
    public event EventHandler<OnPositionChangeEventArgs>? PositionChange;
