@@ -1,230 +1,126 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Numerics;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Windows.Input;
 using TPW.Presentation.Model;
 
 namespace TPW.Presentation.ViewModel
 {
-    public class MainViewModel : INotifyPropertyChanged
-    {
-        private MainModel model;
-        public AsyncObservableCollection<BallPosition> Circles { get; set; }
+   //TODO: Michalina - When simulation is started, disable star simulation button.
+   sealed public class MainViewModel : INotifyPropertyChanged
+   {
+      private readonly MainModel model;
 
-        public int BallsCount
-        {
-            get { return model.GetBallsCount(); }
-            set
+      public MainViewModel()
+      {
+         Circles = new AsyncObservableCollection<ViewModelBallDecorator>();
+
+         model = new MainModel();
+         BallsCount = 5;
+
+         IncreaseButton = new RelayCommand(() =>
+         {
+            BallsCount += 1;
+         });
+         DecreaseButton = new RelayCommand(() =>
+         {
+            BallsCount -= 1;
+         });
+
+         StartSimulationButton = new RelayCommand(() =>
+         {
+            model.SetBallNumber(BallsCount);
+
+            for (var i = 0; i < BallsCount; i++)
             {
-                if (value >= 0)
-                {
-                    model.SetBallNumber(value);
-                    OnPropertyChanged();
-                }
+               Circles.Add(new ViewModelBallDecorator());
             }
-        }
 
-        public ICommand IncreaseButton { get; }
-        public ICommand DecreaseButton { get; }
-        public ICommand StartSimulationButton { get; }
-        public ICommand StopSimulationButton { get; }
-
-		public MainViewModel()
-        {
-            Circles = new AsyncObservableCollection<BallPosition>();
-
-            model = new MainModel();
-            BallsCount = 5;
-
-            IncreaseButton = new RelayCommand(() =>
+            model.BallPositionChange += (sender, args) =>
             {
-                BallsCount += 1;
-            });
-            DecreaseButton = new RelayCommand(() =>
+               if (Circles.Count <= 0) return;
+
+               for (var i = 0; i < BallsCount; i++)
+               {
+                  Circles[args.Ball.ID].Position = args.Ball.Position;
+                  Circles[args.Ball.ID].Radius = args.Ball.Radius;
+               }
+            };
+            model.StartSimulation();
+         });
+
+         StopSimulationButton = new RelayCommand(() =>
+         {
+            model.StopSimulation();
+            Circles.Clear();
+            model.SetBallNumber(BallsCount);
+         });
+      }
+
+      public AsyncObservableCollection<ViewModelBallDecorator> Circles { get; set; }
+
+      public int BallsCount
+      {
+         get { return model.GetBallsCount(); }
+         private set
+         {
+            if (value >= 0)
             {
-                BallsCount -= 1;
-            });
+               model.SetBallNumber(value);
+               this.OnPropertyChanged();
+            }
+         }
+      }
 
-            StartSimulationButton = new RelayCommand(() =>
-            {
-                model.SetBallNumber(BallsCount);
+      public ICommand IncreaseButton { get; }
+      public ICommand DecreaseButton { get; }
+      public ICommand StartSimulationButton { get; }
+      public ICommand StopSimulationButton { get; }
 
-                for (int i = 0; i < BallsCount; i++)
-                {
-                    Circles.Add(new BallPosition());
-                }
+      // Event for View update
+      public event PropertyChangedEventHandler? PropertyChanged;
 
-                model.BallPositionChange += (sender, argv) =>
-                {
-                    if(Circles.Count > 0)
-                        Circles[argv.Id].ChangePosition(argv.Position);
-                };
-                model.StartSimulation();
-            });
-
-            StopSimulationButton = new RelayCommand(() =>
-            {
-                model.StopSimulation();
-                Circles.Clear();
-                model.SetBallNumber(BallsCount);
-
-            });
-        }
-
-        // Event for View update
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string caller = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(caller));
-        }
-    }
+      private void OnPropertyChanged([CallerMemberName] string caller = "")
+      {
+         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(caller));
+      }
+   }
 }
 
 
 public class RelayCommand : ICommand
 {
-    private readonly Action handler;
-    private bool isEnabled;
+   private readonly Action handler;
+   private bool isEnabled;
 
-    public RelayCommand(Action handler)
-    {
-        this.handler = handler;
-        IsEnabled = true;
-    }
+   public RelayCommand(Action handler)
+   {
+      this.handler = handler;
+      IsEnabled = true;
+   }
 
-    public bool IsEnabled
-    {
-        get { return isEnabled; }
-        set
-        {
-            if (value != isEnabled)
-            {
-                isEnabled = value;
-                if (CanExecuteChanged != null)
-                {
-                    CanExecuteChanged(this, EventArgs.Empty);
-                }
-            }
-        }
-    }
+   public bool IsEnabled
+   {
+      get { return isEnabled; }
+      set
+      {
+         if (value != isEnabled)
+         {
+            isEnabled = value;
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+         }
+      }
+   }
 
-    public bool CanExecute(object parameter)
-    {
-        return IsEnabled;
-    }
+   public bool CanExecute(object parameter)
+   {
+      return IsEnabled;
+   }
 
-    public event EventHandler CanExecuteChanged;
+   public event EventHandler? CanExecuteChanged;
 
-    public void Execute(object parameter)
-    {
-        handler();
-    }
-}
-
-public class AsyncObservableCollection<T> : ObservableCollection<T>
-{
-    private SynchronizationContext _synchronizationContext = SynchronizationContext.Current;
-
-    public AsyncObservableCollection()
-    {
-    }
-
-    public AsyncObservableCollection(IEnumerable<T> list)
-        : base(list)
-    {
-    }
-
-    protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
-    {
-        if (SynchronizationContext.Current == _synchronizationContext)
-        {
-            // Execute the CollectionChanged event on the current thread
-            RaiseCollectionChanged(e);
-        }
-        else
-        {
-            // Raises the CollectionChanged event on the creator thread
-            _synchronizationContext.Send(RaiseCollectionChanged, e);
-        }
-    }
-
-    private void RaiseCollectionChanged(object param)
-    {
-        // We are in the creator thread, call the base implementation directly
-        base.OnCollectionChanged((NotifyCollectionChangedEventArgs)param);
-    }
-
-    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-    {
-        if (SynchronizationContext.Current == _synchronizationContext)
-        {
-            // Execute the PropertyChanged event on the current thread
-            RaisePropertyChanged(e);
-        }
-        else
-        {
-            // Raises the PropertyChanged event on the creator thread
-            _synchronizationContext.Send(RaisePropertyChanged, e);
-        }
-    }
-
-    private void RaisePropertyChanged(object param)
-    {
-        // We are in the creator thread, call the base implementation directly
-        base.OnPropertyChanged((PropertyChangedEventArgs)param);
-    }
-}
-
-public class BallPosition : INotifyPropertyChanged
-{
-    private Vector2 pos;
-    public float X
-    {
-        get { return pos.X; }
-        set { pos.X = value; OnPropertyChanged(); }
-    }
-    public float Y
-    {
-        get { return pos.Y; }
-        set { pos.Y = value; OnPropertyChanged(); }
-    }
-
-    public BallPosition(float x, float y)
-	{
-		X = x;
-		Y = y;
-    }
-    public BallPosition(Vector2 position)
-    {
-        X = position.X;
-        Y = position.Y;
-    }
-
-	public BallPosition()
-	{
-        X = 0;
-        Y = 0;
-	}
-
-    public void ChangePosition(Vector2 position)
-	{
-        this.X = position.X;
-        this.Y = position.Y;
-	}
-
-	public override string ToString()
-	{
-        return $"({X}, {Y})";
-	}
-
-    public event PropertyChangedEventHandler PropertyChanged;
-    protected virtual void OnPropertyChanged([CallerMemberName] string caller = "")
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(caller));
-    }
+   public void Execute(object parameter)
+   {
+      handler();
+   }
 }

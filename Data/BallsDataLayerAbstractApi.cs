@@ -1,19 +1,36 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
+using System.Threading;
 
 namespace TPW.Data;
 
 public abstract class BallsDataLayerAbstractApi
 {
-	public abstract void Add(IBall ball);
-	public abstract IBall Get(int index);
-	public abstract int GetBallCount();
-	public static BallsDataLayerAbstractApi CreateBallsList()
-	{
-		return new BallsList();
-	}
+   
+   protected BallsDataLayerAbstractApi(Vector2 boardSize)
+   {
+      this.BoardSize = boardSize;
+      CancelSimulationSource = new CancellationTokenSource();
+   }
 
-	public static IBall CreateBall(Vector2 position)
-	{
-		return new Ball(position);
-	}
+   public CancellationTokenSource CancelSimulationSource { get; }
+
+   public Vector2 BoardSize { get; protected set; } 
+   public abstract void Add(int howMany);
+
+   public event EventHandler<OnPositionChangeEventArgs>? PositionChange;
+
+   protected void OnPositionChange(OnPositionChangeEventArgs argv)
+   {
+      PositionChange?.Invoke(this, argv);
+   }
+
+   public abstract void StartSimulation();
+   public abstract void StopSimulation();
+
+   public static BallsDataLayerAbstractApi? CreateBallsList(Vector2 boardSize)
+   {
+      return new BallsList(boardSize);
+   }
+
 }
