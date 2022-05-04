@@ -35,12 +35,12 @@ internal static class CollisionHandler
 
    public static void CollideWithWalls(IBall ball, Vector2 boardSize)
    {
-      if (ball.Position.X < 0 || ball.Position.X + ball.Radius + 0 > boardSize.X)
+      if (ball.Position.X <= 0 || ball.Position.X + ball.Radius + 0 >= boardSize.X)
       {
          ball.Velocity = new Vector2(-ball.Velocity.X, ball.Velocity.Y);
       }
 
-      if (ball.Position.Y < 0 || ball.Position.Y + ball.Radius + 0 > boardSize.Y)
+      if (ball.Position.Y <= 0 || ball.Position.Y + ball.Radius + 0 >= boardSize.Y)
       {
          ball.Velocity = new Vector2(ball.Velocity.X, -ball.Velocity.Y);
       }
