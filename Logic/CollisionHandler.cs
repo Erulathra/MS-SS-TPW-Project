@@ -26,13 +26,13 @@ internal static class CollisionHandler
 
    private static bool IsBallsCollides(IBall ballOne, IBall ballTwo)
    {
-      var centerOne = ballOne.Position + (Vector2.One * ballOne.Radius / 2);
-      var centerTwo = ballTwo.Position + (Vector2.One * ballTwo.Radius / 2);
-      var distSq = (centerOne.X - centerTwo.X) * (centerOne.X - centerTwo.X)
-                   + (centerOne.Y - centerTwo.Y) * (centerOne.Y - centerTwo.Y);
+      var centerOne = ballOne.Position + (Vector2.One * ballOne.Radius / 2) + ballOne.Velocity * (8/1000f);
+      var centerTwo = ballTwo.Position + (Vector2.One * ballTwo.Radius / 2) + ballTwo.Velocity * (8/1000f);
 
-      var radSumSq = (ballOne.Radius + ballTwo.Radius) * (ballOne.Radius + ballTwo.Radius) / 4;
-      return distSq <= radSumSq;
+      var distance = Vector2.Distance(centerOne, centerTwo);
+      var radiusSum = (ballOne.Radius + ballTwo.Radius) / 2f;
+      
+      return distance <= radiusSum;
    }
 
    public static void CollideWithWalls(IBall ball, Vector2 boardSize)

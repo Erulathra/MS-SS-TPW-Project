@@ -8,8 +8,8 @@ namespace TPW.Data;
 
 internal class BallsList : BallsDataLayerAbstractApi
 {
-   private const int MaxStartSpeed = 500;
-   private const int MinStartSpeed = 200;
+   private const int MaxStartSpeed = 200;
+   private const int MinStartSpeed = 50;
    private readonly List<IBall> ballsList;
 
 
@@ -100,13 +100,15 @@ internal class BallsList : BallsDataLayerAbstractApi
 
       foreach (var ball in ballsList)
       {
-         ball.PositionChange += (_, args) =>
-         {
-            this.OnPositionChange(new OnPositionChangeEventArgs(args.Ball, new List<IBall>(ballsList)));
-         };
+         ball.PositionChange += OnBallOnPositionChange;
 
          Task.Factory.StartNew(ball.Simulate, CancelSimulationSource.Token);
       }
+   }
+
+   private void OnBallOnPositionChange(object _, OnBallPositionChangeEventArgs args)
+   {
+      this.OnPositionChange(new OnPositionChangeEventArgs(args.Ball, new List<IBall>(ballsList)));
    }
 
    public override void StopSimulation()
