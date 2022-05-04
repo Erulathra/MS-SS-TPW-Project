@@ -26,10 +26,12 @@ internal static class CollisionHandler
 
    private static bool IsBallsCollides(IBall ballOne, IBall ballTwo)
    {
-      var distSq = (ballOne.Position.X - ballTwo.Position.X) * (ballOne.Position.X - ballTwo.Position.X)
-                   + (ballOne.Position.Y - ballTwo.Position.Y) * (ballOne.Position.Y - ballTwo.Position.Y);
+      var centerOne = ballOne.Position + (Vector2.One * ballOne.Radius / 2);
+      var centerTwo = ballTwo.Position + (Vector2.One * ballTwo.Radius / 2);
+      var distSq = (centerOne.X - centerTwo.X) * (centerOne.X - centerTwo.X)
+                   + (centerOne.Y - centerTwo.Y) * (centerOne.Y - centerTwo.Y);
 
-      var radSumSq = (ballOne.Radius + ballTwo.Radius) * (ballOne.Radius + ballTwo.Radius);
+      var radSumSq = (ballOne.Radius + ballTwo.Radius) * (ballOne.Radius + ballTwo.Radius) / 4;
       return distSq <= radSumSq;
    }
 
@@ -44,5 +46,28 @@ internal static class CollisionHandler
       {
          ball.Velocity = new Vector2(ball.Velocity.X, -ball.Velocity.Y);
       }
+   }
+
+   public static void HandleCollision(IBall ballOne, IBall ballTwo)
+   {
+      var centerOne = ballOne.Position + (Vector2.One * ballOne.Radius / 2);
+      var centerTwo = ballTwo.Position + (Vector2.One * ballTwo.Radius / 2);
+
+      var unitNormalVector = Vector2.Normalize(centerTwo - centerOne);
+      var unitTangentVector = new Vector2(-unitNormalVector.Y, unitNormalVector.X);
+
+      var velocityOneNormal = Vector2.Dot(unitNormalVector, ballOne.Velocity);
+      var velocityOneTangent = Vector2.Dot(unitTangentVector, ballOne.Velocity);
+      var velocityTwoNormal = Vector2.Dot(unitNormalVector, ballTwo.Velocity);
+      var velocityTwoTangent = Vector2.Dot(unitTangentVector, ballTwo.Velocity);
+
+      var newNormalVelocityOne = (velocityOneNormal * (ballOne.Mass - ballTwo.Mass) + 2 * ballTwo.Mass * velocityTwoNormal) / (ballOne.Mass + ballTwo.Mass);
+      var newNormalVelocityTwo = (velocityTwoNormal * (ballTwo.Mass - ballOne.Mass) + 2 * ballOne.Mass * velocityOneNormal) / (ballOne.Mass + ballTwo.Mass);
+
+      var newVelocityOne = Vector2.Multiply(unitNormalVector, newNormalVelocityOne) + Vector2.Multiply(unitTangentVector, velocityOneTangent);
+      var newVelocityTwo = Vector2.Multiply(unitNormalVector, newNormalVelocityTwo) + Vector2.Multiply(unitTangentVector, velocityTwoTangent);
+
+      ballOne.Velocity = newVelocityOne;
+      ballTwo.Velocity = newVelocityTwo;
    }
 }

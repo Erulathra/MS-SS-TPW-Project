@@ -42,8 +42,8 @@ namespace TPW.Presentation.ViewModel
 
                for (var i = 0; i < BallsCount; i++)
                {
-                  Circles[args.SenderBall.ID].Position = args.SenderBall.Position;
-                  Circles[args.SenderBall.ID].Radius = args.SenderBall.Radius;
+                  Circles[args.Ball.ID].Position = args.Ball.Position;
+                  Circles[args.Ball.ID].Radius = args.Ball.Radius;
                }
             };
             model.StartSimulation();

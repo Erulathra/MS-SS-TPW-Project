@@ -5,12 +5,10 @@ namespace TPW.Logic;
 
 public class OnPositionChangeEventArgs : EventArgs
 {
-   public readonly IList<ILogicBall> Balls;
-   public ILogicBall SenderBall;
+   public ILogicBall Ball;
 
-   public OnPositionChangeEventArgs(ILogicBall senderBall, IList<ILogicBall> balls)
+   public OnPositionChangeEventArgs(ILogicBall ball)
    {
-      this.SenderBall = senderBall;
-      this.Balls = balls;
+      this.Ball = ball;
    }
 }

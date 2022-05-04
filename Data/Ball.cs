@@ -18,7 +18,7 @@ public interface IBall
 {
    Vector2 Position { get; }
    float Radius { get; }
-   float Weight { get; }
+   float Mass { get; }
    Vector2 Velocity { get; set; }
 
    int ID { get; }
@@ -36,14 +36,14 @@ internal class Ball : IBall
       Position = position;
       Velocity = velocity;
       this.owner = owner;
-      Weight = weight;
+      Mass = weight;
       Radius = radius;
       this.ID = ID;
    }
 
    public Vector2 Position { get; private set; }
    public float Radius { get; }
-   public float Weight { get; }
+   public float Mass { get; }
    public Vector2 Velocity { get; set; }
    public int ID { get; }
    public event EventHandler<OnBallPositionChangeEventArgs>? PositionChange;
@@ -55,12 +55,11 @@ internal class Ball : IBall
       while (!owner.CancelSimulationSource.Token.IsCancellationRequested)
       {
          sw.Start();
-
-         var nextPosition = Position + Vector2.Multiply(Velocity, deltaTime);
-         Position = this.ClampPosition(nextPosition);
-
          var newArgs = new OnBallPositionChangeEventArgs(this);
          PositionChange?.Invoke(this, newArgs);
+         
+         var nextPosition = Position + Vector2.Multiply(Velocity, deltaTime);
+         Position = this.ClampPosition(nextPosition);
 
          await Task.Delay(8, owner.CancelSimulationSource.Token).ContinueWith(_ => { });
          // Delta time calculation

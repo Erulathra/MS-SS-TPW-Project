@@ -5,12 +5,10 @@ namespace TPW.Presentation.Model;
 
 public class OnPositionChangeEventArgs : EventArgs
 {
-   public readonly IList<IModelBall> Balls;
-   public readonly IModelBall SenderBall;
+   public readonly IModelBall Ball;
 
-   public OnPositionChangeEventArgs(IModelBall senderBall, IList<IModelBall> balls)
+   public OnPositionChangeEventArgs(IModelBall ball)
    {
-      SenderBall = senderBall;
-      Balls = balls;
+      Ball = ball;
    }
 }

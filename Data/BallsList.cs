@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace TPW.Data;
@@ -11,9 +12,11 @@ internal class BallsList : BallsDataLayerAbstractApi
    private const int MinStartSpeed = 200;
    private readonly List<IBall> ballsList;
 
+
    public BallsList(Vector2 boardSize) : base(boardSize)
    {
       ballsList = new List<IBall>();
+      
    }
 
    public override void Add(int howMany)
@@ -46,6 +49,7 @@ internal class BallsList : BallsDataLayerAbstractApi
 
          isPositionCorrect = this.CheckIsSpaceFree(new Vector2(x, y), ballRadius);
       }
+
       return new Vector2(x, y);
    }
 
@@ -75,9 +79,14 @@ internal class BallsList : BallsDataLayerAbstractApi
       var x = rng.Next(-MaxStartSpeed, MaxStartSpeed);
       var y = rng.Next(-MaxStartSpeed, MaxStartSpeed);
       if (Math.Abs(x) < MinStartSpeed)
+      {
          x = MinStartSpeed;
+      }
+
       if (Math.Abs(y) < MinStartSpeed)
+      {
          y = MinStartSpeed;
+      }
 
       return new Vector2(x, y);
    }

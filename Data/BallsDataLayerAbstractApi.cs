@@ -6,6 +6,7 @@ namespace TPW.Data;
 
 public abstract class BallsDataLayerAbstractApi
 {
+   
    protected BallsDataLayerAbstractApi(Vector2 boardSize)
    {
       this.BoardSize = boardSize;

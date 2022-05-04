@@ -35,14 +35,12 @@ namespace TPW.Presentation.Model
       private void PrepareBallsLogic()
       {
          ballsLogic = BallsLogicLayerAbstractApi.CreateBallsLogic(boardSize);
-         ballsLogic.PositionChange += (sender, args) =>
-         {
-            IList<IModelBall> logicBallList = new List<IModelBall>();
-            foreach (var ball in args.Balls)
-               logicBallList.Add(new ModelBallAdapter(ball));
-          
-            BallPositionChange?.Invoke(this, new OnPositionChangeEventArgs(new ModelBallAdapter(args.SenderBall), logicBallList));
-         };
+         ballsLogic.PositionChange += this.OnBallsLogicOnPositionChange;
+      }
+
+      private void OnBallsLogicOnPositionChange(object sender, Logic.OnPositionChangeEventArgs args)
+      {
+         BallPositionChange?.Invoke(this, new OnPositionChangeEventArgs(new ModelBallAdapter(args.Ball)));
       }
 
       public void SetBallNumber(int amount)
