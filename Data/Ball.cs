@@ -58,8 +58,9 @@ internal class Ball : IBall
 
          var nextPosition = Position + Vector2.Multiply(Velocity, deltaTime);
          Position = this.ClampPosition(nextPosition);
-         
-         PositionChange?.Invoke(this, new OnBallPositionChangeEventArgs(this));
+
+         var newArgs = new OnBallPositionChangeEventArgs(this);
+         PositionChange?.Invoke(this, newArgs);
 
          await Task.Delay(8, owner.CancelSimulationSource.Token).ContinueWith(_ => { });
          // Delta time calculation
