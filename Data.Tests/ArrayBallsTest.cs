@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Numerics;
 using NUnit.Framework;
 
@@ -6,32 +7,63 @@ namespace TPW.Data.Tests
     public class Tests
     {
         private BallsDataLayerAbstractApi balls;
-        private IBall testBall1;
-        private IBall testBall2;
-        private IBall testBall3;
+        private Vector2 boardSize = new Vector2(800, 600);
 
         [SetUp]
         public void Setup()
         {
-            balls = BallsDataLayerAbstractApi.CreateBallsList();
-            testBall1 = BallsDataLayerAbstractApi.CreateBall(new Vector2(5, 10));
-            testBall2 = BallsDataLayerAbstractApi.CreateBall(new Vector2(8, 4));
-            testBall3 = BallsDataLayerAbstractApi.CreateBall(new Vector2(2, 9));
+            balls = BallsDataLayerAbstractApi.CreateBallsList(boardSize);
+        }
+
+        [Test]
+        public void BoardSizeTest()
+        {
+            Assert.AreEqual(boardSize, balls.BoardSize);
         }
 
         [Test]
         public void AddBallTest()
         {
-            balls.Add(testBall1);
-            Assert.AreEqual(1, balls.GetBallCount());
-            balls.Add(testBall2);
-            Assert.AreEqual(2, balls.GetBallCount());
-            balls.Add(testBall3);
-            Assert.AreEqual(3, balls.GetBallCount());
+            balls.Add(2);
+            Assert.AreEqual(2, balls.BallCount);
+            balls.Add(5);
+            Assert.AreEqual(7, balls.BallCount);
+        }
+        
+        [Test]
+        public void SimulationTest()
+        {
+            var interactionCount = 0;
+            balls.Add(10);
+            Assert.AreEqual(10, balls.BallCount);
 
-            Assert.AreEqual(testBall1, balls.Get(0));
-            Assert.AreEqual(testBall2, balls.Get(1));
-            Assert.AreEqual(testBall3, balls.Get(2));
+            // var startPositionList = new List<Vector2>();
+            // for (int i = 0; i < balls.BallCount; i++)
+            // {
+            //     startPositionList.Add(balls.GetBalls()[i].Position);
+            // }
+
+            balls.PositionChange += (_, _) =>
+            {
+                interactionCount++;
+                if (interactionCount >= 50)
+                {
+                    balls.StopSimulation();
+                }
+            };
+            balls.StartSimulation();
+            while (interactionCount < 50)
+            { }
+
+            Assert.GreaterOrEqual(interactionCount, 49);
+            // for (int i = 0; i < balls.GetBallsCount(); i++)
+            // {
+            //     if (startPositionList[i] != balls.GetBalls()[i].Position)
+            //     {
+            //         return;
+            //     }
+            // }
+            // Assert.Fail();
         }
     }
 }
