@@ -16,8 +16,35 @@ public class BallsLogicTest
 	}
 
     [Test]
+    public void AddBalls()
+    {
+        Assert.DoesNotThrow(() => ballsLogic.AddBalls(5));
+    }
+
+    [Test]
     public void LogicSimulationTest()
     {
-        //TODO: test event and collisions
+        var interactionCount = 0;
+        ballsLogic.AddBalls(5);
+        var ballsPositions = new Dictionary<int, Vector2>();
+
+        ballsLogic.PositionChange += (sender, args) =>
+        {
+            if(ballsPositions.ContainsKey(args.Ball.ID))
+                Assert.AreNotEqual(args.Ball.Position, args.Ball.ID);
+            else
+                ballsPositions[args.Ball.ID] = args.Ball.Position;
+            
+            interactionCount++;
+            if (interactionCount >= 100)
+            {
+                ballsLogic.StopSimulation();
+            }
+        };
+        ballsLogic.StartSimulation();
+        while (interactionCount < 100)
+        { }
+
+        Assert.GreaterOrEqual(interactionCount, 99);
     }
 }

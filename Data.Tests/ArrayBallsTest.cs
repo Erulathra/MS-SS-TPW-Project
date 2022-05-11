@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using NUnit.Framework;
@@ -7,7 +8,7 @@ namespace TPW.Data.Tests
     public class Tests
     {
         private BallsDataLayerAbstractApi balls;
-        private Vector2 boardSize = new Vector2(800, 600);
+        private readonly Vector2 boardSize = new Vector2(800, 600);
 
         [SetUp]
         public void Setup()
@@ -28,42 +29,42 @@ namespace TPW.Data.Tests
             Assert.AreEqual(2, balls.BallCount);
             balls.Add(5);
             Assert.AreEqual(7, balls.BallCount);
+            Assert.Catch<Exception>(() => balls.Add(2000));
         }
         
         [Test]
+        // Tests whether event works and balls stay inside board
         public void SimulationTest()
         {
             var interactionCount = 0;
             balls.Add(10);
             Assert.AreEqual(10, balls.BallCount);
 
-            // var startPositionList = new List<Vector2>();
-            // for (int i = 0; i < balls.BallCount; i++)
-            // {
-            //     startPositionList.Add(balls.GetBalls()[i].Position);
-            // }
+            var ballsList = new HashSet<IBall>();
 
-            balls.PositionChange += (_, _) =>
+            balls.PositionChange += (sender, args) =>
             {
+                ballsList.Add(args.SenderBall);
+                //Check if ball is inside board boundaries
+                var pos = args.SenderBall.Position;
+                var rad = args.SenderBall.Radius;
+                Assert.GreaterOrEqual(pos.X-rad, 0);
+                Assert.GreaterOrEqual(pos.Y-rad, 0);
+                Assert.LessOrEqual(pos.X+rad, boardSize.X);
+                Assert.LessOrEqual(pos.Y+rad, boardSize.Y);
+                
                 interactionCount++;
-                if (interactionCount >= 50)
+                if (interactionCount >= 100)
                 {
                     balls.StopSimulation();
                 }
             };
             balls.StartSimulation();
-            while (interactionCount < 50)
+            while (interactionCount < 100)
             { }
 
-            Assert.GreaterOrEqual(interactionCount, 49);
-            // for (int i = 0; i < balls.GetBallsCount(); i++)
-            // {
-            //     if (startPositionList[i] != balls.GetBalls()[i].Position)
-            //     {
-            //         return;
-            //     }
-            // }
-            // Assert.Fail();
+            Assert.GreaterOrEqual(interactionCount, 99);
+            Assert.GreaterOrEqual(ballsList.Count, 9);
         }
     }
 }
