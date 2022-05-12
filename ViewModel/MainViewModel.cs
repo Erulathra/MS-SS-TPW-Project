@@ -6,7 +6,6 @@ using TPW.Presentation.Model;
 
 namespace TPW.Presentation.ViewModel
 {
-   //TODO: Michalina - When simulation is started, disable star simulation button.
    sealed public class MainViewModel : INotifyPropertyChanged
    {
       private readonly MainModel model;
@@ -47,6 +46,7 @@ namespace TPW.Presentation.ViewModel
                }
             };
             model.StartSimulation();
+            this.ToggleSimulationButtons();
          });
 
          StopSimulationButton = new RelayCommand(() =>
@@ -54,7 +54,9 @@ namespace TPW.Presentation.ViewModel
             model.StopSimulation();
             Circles.Clear();
             model.SetBallNumber(BallsCount);
+            this.ToggleSimulationButtons();
          });
+         StopSimulationButton.IsEnabled = false;
       }
 
       public AsyncObservableCollection<ViewModelBallDecorator> Circles { get; set; }
@@ -72,10 +74,18 @@ namespace TPW.Presentation.ViewModel
          }
       }
 
-      public ICommand IncreaseButton { get; }
-      public ICommand DecreaseButton { get; }
-      public ICommand StartSimulationButton { get; }
-      public ICommand StopSimulationButton { get; }
+      private void ToggleSimulationButtons()
+      {
+          IncreaseButton.IsEnabled = !IncreaseButton.IsEnabled;
+          DecreaseButton.IsEnabled = !DecreaseButton.IsEnabled;
+          StartSimulationButton!.IsEnabled = !StartSimulationButton!.IsEnabled;
+          StopSimulationButton!.IsEnabled = !StopSimulationButton!.IsEnabled;
+      }
+
+      public ISimpleCommand IncreaseButton { get; }
+      public ISimpleCommand DecreaseButton { get; }
+      public ISimpleCommand StartSimulationButton { get; }
+      public ISimpleCommand StopSimulationButton { get; }
 
       // Event for View update
       public event PropertyChangedEventHandler? PropertyChanged;
@@ -87,8 +97,12 @@ namespace TPW.Presentation.ViewModel
    }
 }
 
+public interface ISimpleCommand : ICommand
+{
+    public bool IsEnabled { get; set; }
+}
 
-public class RelayCommand : ICommand
+public class RelayCommand : ISimpleCommand
 {
    private readonly Action handler;
    private bool isEnabled;
@@ -114,7 +128,7 @@ public class RelayCommand : ICommand
 
    public bool CanExecute(object parameter)
    {
-      return IsEnabled;
+       return isEnabled;
    }
 
    public event EventHandler? CanExecuteChanged;

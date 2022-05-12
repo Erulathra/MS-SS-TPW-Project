@@ -26,23 +26,24 @@ internal static class CollisionHandler
 
    private static bool IsBallsCollides(IBall ballOne, IBall ballTwo)
    {
-      var centerOne = ballOne.Position + (Vector2.One * ballOne.Radius / 2);
-      var centerTwo = ballTwo.Position + (Vector2.One * ballTwo.Radius / 2);
-      var distSq = (centerOne.X - centerTwo.X) * (centerOne.X - centerTwo.X)
-                   + (centerOne.Y - centerTwo.Y) * (centerOne.Y - centerTwo.Y);
+      var centerOne = ballOne.Position + (Vector2.One * ballOne.Radius / 2) + ballOne.Velocity * (16 / 1000f);
+      var centerTwo = ballTwo.Position + (Vector2.One * ballTwo.Radius / 2) + ballTwo.Velocity * (16 / 1000f);
 
-      var radSumSq = (ballOne.Radius + ballTwo.Radius) * (ballOne.Radius + ballTwo.Radius) / 4;
-      return distSq <= radSumSq;
+      var distance = Vector2.Distance(centerOne, centerTwo);
+      var radiusSum = (ballOne.Radius + ballTwo.Radius) / 2f;
+      
+      return distance <= radiusSum;
    }
 
    public static void CollideWithWalls(IBall ball, Vector2 boardSize)
    {
-      if (ball.Position.X <= 0 || ball.Position.X + ball.Radius + 0 >= boardSize.X)
+      var position = ball.Position + ball.Velocity * (16 / 1000f);
+      if (position.X <= 0 || position.X + ball.Radius >= boardSize.X)
       {
          ball.Velocity = new Vector2(-ball.Velocity.X, ball.Velocity.Y);
       }
 
-      if (ball.Position.Y <= 0 || ball.Position.Y + ball.Radius + 0 >= boardSize.Y)
+      if (position.Y <= 0 || position.Y + ball.Radius >= boardSize.Y)
       {
          ball.Velocity = new Vector2(ball.Velocity.X, -ball.Velocity.Y);
       }

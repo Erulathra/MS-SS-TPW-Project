@@ -1,29 +1,44 @@
 ﻿using System.Collections.Generic;
+using System.Numerics;
 using TPW.Data;
 
 namespace TPW.Logic.Tests;
 
 public class DataLayerFixture : BallsDataLayerAbstractApi
 {
-	private readonly List<IBall> ballsList;
+   public bool isSimulationWorking;
 
-	public DataLayerFixture()
-	{
-		this.ballsList = new List<IBall>();
-	}
+   public DataLayerFixture(Vector2 boardSize) : base(boardSize)
+   {
+      this.boardSize = boardSize;
+      BallsList = new List<IBall>();
+   }
 
-	public override void Add(IBall ball)
-	{
-		ballsList.Add(ball);
-	}
+   public List<IBall> BallsList { get; set; }
+   public Vector2 boardSize { get; set; }
 
-	public override IBall Get(int index)
-	{
-		return ballsList[index];
-	}
+   public override void Add(int howMany)
+   {
+      for (var i = 0; i < howMany; i++)
+      {
+         BallsList.Add(new BallFixture(1, new Vector2(1, 1), 1, 1, new Vector2(1, 1), this));
+      }
+   }
 
-	public override int GetBallCount()
-	{
-		return ballsList.Count;
-	}
+   public override void StartSimulation()
+   {
+      isSimulationWorking = true;
+   }
+
+   public override void StopSimulation()
+   {
+      isSimulationWorking = false;
+   }
+
+   public void OnBallOnPositionChange()
+   {
+      var ball = BallsList[0];
+      var newArgs = new TPW.Data.OnPositionChangeEventArgs(ball, new List<IBall>(BallsList));
+      this.OnPositionChange(newArgs);
+   }
 }

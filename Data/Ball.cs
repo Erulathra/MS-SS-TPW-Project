@@ -61,7 +61,7 @@ internal class Ball : IBall
          var nextPosition = Position + Vector2.Multiply(Velocity, deltaTime);
          Position = this.ClampPosition(nextPosition);
 
-         await Task.Delay(8, owner.CancelSimulationSource.Token).ContinueWith(_ => { });
+         await Task.Delay(4, owner.CancelSimulationSource.Token).ContinueWith(_ => { });
          // Delta time calculation
          sw.Stop();
          deltaTime = sw.ElapsedMilliseconds / 1000f;
