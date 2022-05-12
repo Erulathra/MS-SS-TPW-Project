@@ -6,37 +6,39 @@ namespace TPW.Logic.Tests;
 
 public class DataLayerFixture : BallsDataLayerAbstractApi
 {
-	private readonly List<IBall> ballsList;
-    private readonly Vector2 boardSize;
+   public bool isSimulationWorking;
 
-    public DataLayerFixture(Vector2 boardSize) : base(boardSize)
-    {
-        this.boardSize = boardSize;
-        this.ballsList = new List<IBall>();
-    }
-    //TODO: consult what to do
+   public DataLayerFixture(Vector2 boardSize) : base(boardSize)
+   {
+      this.boardSize = boardSize;
+      BallsList = new List<IBall>();
+   }
 
- //    public override void AddBalls(int howMany)
-	// {
-	// 	ballsList.Add(howMany);
-	// }
- //
-	// public override int GetBallCount()
-	// {
-	// 	return ballsList.Count;
-	// }
-    public override void Add(int howMany)
-    {
-        throw new System.NotImplementedException();
-    }
+   public List<IBall> BallsList { get; set; }
+   public Vector2 boardSize { get; set; }
 
-    public override void StartSimulation()
-    {
-        throw new System.NotImplementedException();
-    }
+   public override void Add(int howMany)
+   {
+      for (var i = 0; i < howMany; i++)
+      {
+         BallsList.Add(new BallFixture(1, new Vector2(1, 1), 1, 1, new Vector2(1, 1), this));
+      }
+   }
 
-    public override void StopSimulation()
-    {
-        throw new System.NotImplementedException();
-    }
+   public override void StartSimulation()
+   {
+      isSimulationWorking = true;
+   }
+
+   public override void StopSimulation()
+   {
+      isSimulationWorking = false;
+   }
+
+   public void OnBallOnPositionChange()
+   {
+      var ball = BallsList[0];
+      var newArgs = new TPW.Data.OnPositionChangeEventArgs(ball, new List<IBall>(BallsList));
+      this.OnPositionChange(newArgs);
+   }
 }

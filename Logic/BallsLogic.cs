@@ -27,9 +27,10 @@ internal class BallsLogic : BallsLogicLayerAbstractApi
 
    private void OnDataBallsOnPositionChange(object _, Data.OnPositionChangeEventArgs args)
    {
-      this.OnPositionChange(new OnPositionChangeEventArgs(new LogicBallAdapter(args.SenderBall)));
       this.HandleBallsCollisions(args.SenderBall, args.Balls);
       CollisionHandler.CollideWithWalls(args.SenderBall, dataBalls.BoardSize);
+      var newArgs = new OnPositionChangeEventArgs(new LogicBallAdapter(args.SenderBall));
+      this.OnPositionChange(newArgs);
    }
 
    private void HandleBallsCollisions(IBall ball, IList<IBall> allBalls)

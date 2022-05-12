@@ -32,7 +32,6 @@ internal class BallsList : BallsDataLayerAbstractApi
          IBall ball = new Ball(ballsList.Count, position, radius, weight, velocity, this);
 
          ballsList.Add(ball);
-         BallCount++;
       }
    }
 

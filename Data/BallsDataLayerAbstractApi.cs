@@ -17,7 +17,6 @@ public abstract class BallsDataLayerAbstractApi
 
    public Vector2 BoardSize { get; protected set; } 
    public abstract void Add(int howMany);
-   public int BallCount { get; protected set; }
 
    public event EventHandler<OnPositionChangeEventArgs>? PositionChange;
 
