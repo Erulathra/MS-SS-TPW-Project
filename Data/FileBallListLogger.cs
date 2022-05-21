@@ -7,17 +7,23 @@ using Newtonsoft.Json.Linq;
 
 namespace TPW.Data;
 
-internal class BallListLogger
+internal class FileBallListLogger : IBallListLogger
 {
-   public static string logFilePath = "%TEMP%/Balls/ballsLog.json";
+   private readonly string logFilePath;
 
    private Task? loggingTask;
 
    private ConcurrentQueue<IBall> ballQueue = new ConcurrentQueue<IBall>();
 
    private readonly Mutex queueMutex = new Mutex();
-   
-   public async void AddToLogQueue(IBall ball)
+
+   public FileBallListLogger()
+   {
+      string tempPath = Path.GetTempPath();
+      logFilePath = tempPath + "balls.json";
+   }
+
+   public void AddToLogQueue(IBall ball)
    {
       queueMutex.WaitOne();
       try
@@ -29,10 +35,10 @@ internal class BallListLogger
          queueMutex.ReleaseMutex();
       }
       
-      if (loggingTask != null || loggingTask.IsCompleted.Equals("false"))
+      if (loggingTask != null && !loggingTask.IsCompleted)
          return;
 
-      loggingTask = Task.Run(this.LogToFile);
+      loggingTask = this.LogToFile();
    }
 
    private async Task LogToFile()
@@ -41,7 +47,14 @@ internal class BallListLogger
       JArray array;
       if (File.Exists(logFilePath))
       {
-         array = JArray.Parse(File.ReadAllText(logFilePath));
+         try
+         {
+            array = JArray.Parse(await File.ReadAllTextAsync(logFilePath));
+         }
+         catch (JsonReaderException)
+         {
+            array = new JArray();
+         }
       }
       else
       {
@@ -59,7 +72,7 @@ internal class BallListLogger
       
       // Convert data to string and save it
       string output = JsonConvert.SerializeObject(array);
-      File.WriteAllText(logFilePath ,output);
+      await File.WriteAllTextAsync(logFilePath ,output);
    }
   
 }

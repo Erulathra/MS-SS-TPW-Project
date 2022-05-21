@@ -13,6 +13,8 @@ internal class BallsList : BallsDataLayerAbstractApi
    private const int MaxRadius = 30;
    private readonly List<IBall> ballsList;
 
+   private readonly IBallListLogger ballListLogger = new FileBallListLogger();
+
 
    public BallsList(Vector2 boardSize) : base(boardSize)
    {
@@ -112,6 +114,7 @@ internal class BallsList : BallsDataLayerAbstractApi
 
    private void OnBallOnPositionChange(object _, OnBallPositionChangeEventArgs args)
    {
+      ballListLogger.AddToLogQueue(args.Ball);
       OnPositionChangeEventArgs newArgs = new OnPositionChangeEventArgs(args.Ball, new List<IBall>(ballsList));
       this.OnPositionChange(newArgs);
    }
