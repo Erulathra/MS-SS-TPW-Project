@@ -25,7 +25,7 @@ internal class BallsList : BallsDataLayerAbstractApi
       for (var i = 0; i < howMany; i++)
       {
          var radius = rand.Next(MinRadius, MaxRadius);
-         var weight = rand.Next(25, 50);
+         var weight = radius;
 
          var position = this.GetRandomPointInsideBoard(radius);
          var velocity = this.GetRandomVelocity();
