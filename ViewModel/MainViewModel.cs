@@ -30,7 +30,7 @@ namespace TPW.Presentation.ViewModel
          {
             model.SetBallNumber(BallsCount);
 
-            for (var i = 0; i < BallsCount; i++)
+            for (int i = 0; i < BallsCount; i++)
             {
                Circles.Add(new ViewModelBallDecorator());
             }
@@ -39,7 +39,7 @@ namespace TPW.Presentation.ViewModel
             {
                if (Circles.Count <= 0) return;
 
-               for (var i = 0; i < BallsCount; i++)
+               for (int i = 0; i < BallsCount; i++)
                {
                   Circles[args.Ball.ID].Position = args.Ball.Position;
                   Circles[args.Ball.ID].Radius = args.Ball.Radius;

@@ -29,7 +29,7 @@ internal class BallsLogic : BallsLogicLayerAbstractApi
    {
       this.HandleBallsCollisions(args.SenderBall, args.Balls);
       CollisionHandler.CollideWithWalls(args.SenderBall, dataBalls.BoardSize);
-      var newArgs = new OnPositionChangeEventArgs(new LogicBallAdapter(args.SenderBall));
+      OnPositionChangeEventArgs newArgs = new OnPositionChangeEventArgs(new LogicBallAdapter(args.SenderBall));
       this.OnPositionChange(newArgs);
    }
 
@@ -38,7 +38,7 @@ internal class BallsLogic : BallsLogicLayerAbstractApi
       simulationPauseMutex.WaitOne();
       try
       {
-         var collidedBall = CollisionHandler.CheckCollisions(ball, allBalls);
+         IBall? collidedBall = CollisionHandler.CheckCollisions(ball, allBalls);
          if (collidedBall != null)
          {
             CollisionHandler.HandleCollision(ball, collidedBall);

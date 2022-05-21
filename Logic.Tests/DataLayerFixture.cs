@@ -19,7 +19,7 @@ public class DataLayerFixture : BallsDataLayerAbstractApi
 
    public override void Add(int howMany)
    {
-      for (var i = 0; i < howMany; i++)
+      for (int i = 0; i < howMany; i++)
       {
          BallsList.Add(new BallFixture(1, new Vector2(1, 1), 1, 1, new Vector2(1, 1), this));
       }
@@ -37,8 +37,8 @@ public class DataLayerFixture : BallsDataLayerAbstractApi
 
    public void OnBallOnPositionChange()
    {
-      var ball = BallsList[0];
-      var newArgs = new TPW.Data.OnPositionChangeEventArgs(ball, new List<IBall>(BallsList));
+      IBall ball = BallsList[0];
+      Data.OnPositionChangeEventArgs newArgs = new TPW.Data.OnPositionChangeEventArgs(ball, new List<IBall>(BallsList));
       this.OnPositionChange(newArgs);
    }
 }

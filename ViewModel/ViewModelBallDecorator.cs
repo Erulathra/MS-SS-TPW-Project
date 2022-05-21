@@ -76,7 +76,7 @@ public class ViewModelBallDecorator : INotifyPropertyChanged
 
    private void OnPropertyChanged([CallerMemberName] string caller = "")
    {
-      var args = new PropertyChangedEventArgs(caller);
+      PropertyChangedEventArgs args = new PropertyChangedEventArgs(caller);
       PropertyChanged?.Invoke(this, args);
    }
 }

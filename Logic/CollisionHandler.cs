@@ -8,7 +8,7 @@ internal static class CollisionHandler
 {
    public static IBall? CheckCollisions(IBall ball, IEnumerable<IBall> ballsList)
    {
-      foreach (var ballTwo in ballsList)
+      foreach (IBall? ballTwo in ballsList)
       {
          if (ReferenceEquals(ball, ballTwo))
          {
@@ -26,18 +26,18 @@ internal static class CollisionHandler
 
    private static bool IsBallsCollides(IBall ballOne, IBall ballTwo)
    {
-      var centerOne = ballOne.Position + (Vector2.One * ballOne.Radius / 2) + ballOne.Velocity * (16 / 1000f);
-      var centerTwo = ballTwo.Position + (Vector2.One * ballTwo.Radius / 2) + ballTwo.Velocity * (16 / 1000f);
+      Vector2 centerOne = ballOne.Position + (Vector2.One * ballOne.Radius / 2) + ballOne.Velocity * (16 / 1000f);
+      Vector2 centerTwo = ballTwo.Position + (Vector2.One * ballTwo.Radius / 2) + ballTwo.Velocity * (16 / 1000f);
 
-      var distance = Vector2.Distance(centerOne, centerTwo);
-      var radiusSum = (ballOne.Radius + ballTwo.Radius) / 2f;
+      float distance = Vector2.Distance(centerOne, centerTwo);
+      float radiusSum = (ballOne.Radius + ballTwo.Radius) / 2f;
       
       return distance <= radiusSum;
    }
 
    public static void CollideWithWalls(IBall ball, Vector2 boardSize)
    {
-      var position = ball.Position + ball.Velocity * (16 / 1000f);
+      Vector2 position = ball.Position + ball.Velocity * (16 / 1000f);
       if (position.X <= 0 || position.X + ball.Radius >= boardSize.X)
       {
          ball.Velocity = new Vector2(-ball.Velocity.X, ball.Velocity.Y);
@@ -51,22 +51,22 @@ internal static class CollisionHandler
 
    public static void HandleCollision(IBall ballOne, IBall ballTwo)
    {
-      var centerOne = ballOne.Position + (Vector2.One * ballOne.Radius / 2);
-      var centerTwo = ballTwo.Position + (Vector2.One * ballTwo.Radius / 2);
+      Vector2 centerOne = ballOne.Position + (Vector2.One * ballOne.Radius / 2);
+      Vector2 centerTwo = ballTwo.Position + (Vector2.One * ballTwo.Radius / 2);
 
-      var unitNormalVector = Vector2.Normalize(centerTwo - centerOne);
-      var unitTangentVector = new Vector2(-unitNormalVector.Y, unitNormalVector.X);
+      Vector2 unitNormalVector = Vector2.Normalize(centerTwo - centerOne);
+      Vector2 unitTangentVector = new Vector2(-unitNormalVector.Y, unitNormalVector.X);
 
-      var velocityOneNormal = Vector2.Dot(unitNormalVector, ballOne.Velocity);
-      var velocityOneTangent = Vector2.Dot(unitTangentVector, ballOne.Velocity);
-      var velocityTwoNormal = Vector2.Dot(unitNormalVector, ballTwo.Velocity);
-      var velocityTwoTangent = Vector2.Dot(unitTangentVector, ballTwo.Velocity);
+      float velocityOneNormal = Vector2.Dot(unitNormalVector, ballOne.Velocity);
+      float velocityOneTangent = Vector2.Dot(unitTangentVector, ballOne.Velocity);
+      float velocityTwoNormal = Vector2.Dot(unitNormalVector, ballTwo.Velocity);
+      float velocityTwoTangent = Vector2.Dot(unitTangentVector, ballTwo.Velocity);
 
-      var newNormalVelocityOne = (velocityOneNormal * (ballOne.Mass - ballTwo.Mass) + 2 * ballTwo.Mass * velocityTwoNormal) / (ballOne.Mass + ballTwo.Mass);
-      var newNormalVelocityTwo = (velocityTwoNormal * (ballTwo.Mass - ballOne.Mass) + 2 * ballOne.Mass * velocityOneNormal) / (ballOne.Mass + ballTwo.Mass);
+      float newNormalVelocityOne = (velocityOneNormal * (ballOne.Mass - ballTwo.Mass) + 2 * ballTwo.Mass * velocityTwoNormal) / (ballOne.Mass + ballTwo.Mass);
+      float newNormalVelocityTwo = (velocityTwoNormal * (ballTwo.Mass - ballOne.Mass) + 2 * ballOne.Mass * velocityOneNormal) / (ballOne.Mass + ballTwo.Mass);
 
-      var newVelocityOne = Vector2.Multiply(unitNormalVector, newNormalVelocityOne) + Vector2.Multiply(unitTangentVector, velocityOneTangent);
-      var newVelocityTwo = Vector2.Multiply(unitNormalVector, newNormalVelocityTwo) + Vector2.Multiply(unitTangentVector, velocityTwoTangent);
+      Vector2 newVelocityOne = Vector2.Multiply(unitNormalVector, newNormalVelocityOne) + Vector2.Multiply(unitTangentVector, velocityOneTangent);
+      Vector2 newVelocityTwo = Vector2.Multiply(unitNormalVector, newNormalVelocityTwo) + Vector2.Multiply(unitTangentVector, velocityTwoTangent);
 
       ballOne.Velocity = newVelocityOne;
       ballTwo.Velocity = newVelocityTwo;

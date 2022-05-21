@@ -21,14 +21,14 @@ internal class BallsList : BallsDataLayerAbstractApi
 
    public override void Add(int howMany)
    {
-      var rand = new Random();
-      for (var i = 0; i < howMany; i++)
+      Random rand = new Random();
+      for (int i = 0; i < howMany; i++)
       {
-         var radius = rand.Next(MinRadius, MaxRadius);
-         var weight = radius;
+         int radius = rand.Next(MinRadius, MaxRadius);
+         int weight = radius;
 
-         var position = this.GetRandomPointInsideBoard(radius);
-         var velocity = this.GetRandomVelocity();
+         Vector2 position = this.GetRandomPointInsideBoard(radius);
+         Vector2 velocity = this.GetRandomVelocity();
          IBall ball = new Ball(ballsList.Count, position, radius, weight, velocity, this);
 
          ballsList.Add(ball);
@@ -37,11 +37,11 @@ internal class BallsList : BallsDataLayerAbstractApi
 
    private Vector2 GetRandomPointInsideBoard(int ballRadius)
    {
-      var rng = new Random();
-      var isPositionCorrect = false;
-      var x = 0;
-      var y = 0;
-      var i = 0;
+      Random rng = new Random();
+      bool isPositionCorrect = false;
+      float x = 0;
+      float y = 0;
+      int i = 0;
       while (!isPositionCorrect)
       {
          x = rng.Next(ballRadius, (int)(BoardSize.X - ballRadius));
@@ -59,7 +59,7 @@ internal class BallsList : BallsDataLayerAbstractApi
 
    private bool CheckIsSpaceFree(Vector2 position, int ballRadius)
    {
-      foreach (var ball in ballsList)
+      foreach (IBall? ball in ballsList)
       {
          if (this.IsCirclesCollides(ball.Position, ball.Radius, position, ballRadius))
          {
@@ -72,16 +72,16 @@ internal class BallsList : BallsDataLayerAbstractApi
 
    private bool IsCirclesCollides(Vector2 position1, float radius1, Vector2 position2, float radius2)
    {
-      var distSq = (position1.X - position2.X) * (position1.X - position2.X) + (position1.Y - position2.Y) * (position1.Y - position2.Y);
-      var radSumSq = (radius1 + radius2) * (radius1 + radius2);
+      float distSq = (position1.X - position2.X) * (position1.X - position2.X) + (position1.Y - position2.Y) * (position1.Y - position2.Y);
+      float radSumSq = (radius1 + radius2) * (radius1 + radius2);
       return distSq <= radSumSq;
    }
 
    private Vector2 GetRandomVelocity()
    {
-      var rng = new Random();
-      var x = rng.Next(-MaxStartSpeed, MaxStartSpeed);
-      var y = rng.Next(-MaxStartSpeed, MaxStartSpeed);
+      Random rng = new Random();
+      int x = rng.Next(-MaxStartSpeed, MaxStartSpeed);
+      int y = rng.Next(-MaxStartSpeed, MaxStartSpeed);
       if (Math.Abs(x) < MinStartSpeed)
       {
          x = MinStartSpeed;
@@ -102,7 +102,7 @@ internal class BallsList : BallsDataLayerAbstractApi
          return;
       }
 
-      foreach (var ball in ballsList)
+      foreach (IBall? ball in ballsList)
       {
          ball.PositionChange += this.OnBallOnPositionChange;
 
@@ -112,7 +112,7 @@ internal class BallsList : BallsDataLayerAbstractApi
 
    private void OnBallOnPositionChange(object _, OnBallPositionChangeEventArgs args)
    {
-      var newArgs = new OnPositionChangeEventArgs(args.Ball, new List<IBall>(ballsList));
+      OnPositionChangeEventArgs newArgs = new OnPositionChangeEventArgs(args.Ball, new List<IBall>(ballsList));
       this.OnPositionChange(newArgs);
    }
 

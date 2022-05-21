@@ -50,15 +50,15 @@ internal class Ball : IBall
 
    public async void Simulate()
    {
-      var sw = new Stopwatch();
-      var deltaTime = 0f;
+      Stopwatch sw = new Stopwatch();
+      float deltaTime = 0f;
       while (!owner.CancelSimulationSource.Token.IsCancellationRequested)
       {
          sw.Start();
-         var newArgs = new OnBallPositionChangeEventArgs(this);
+         OnBallPositionChangeEventArgs newArgs = new OnBallPositionChangeEventArgs(this);
          PositionChange?.Invoke(this, newArgs);
          
-         var nextPosition = Position + Vector2.Multiply(Velocity, deltaTime);
+         Vector2 nextPosition = Position + Vector2.Multiply(Velocity, deltaTime);
          Position = this.ClampPosition(nextPosition);
 
          await Task.Delay(4, owner.CancelSimulationSource.Token).ContinueWith(_ => { });
