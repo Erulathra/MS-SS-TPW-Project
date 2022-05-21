@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Numerics;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace TPW.Data;
@@ -14,7 +15,7 @@ public class OnBallPositionChangeEventArgs
          this.Ball = ball;
       }
    }
-public interface IBall
+public interface IBall : ISerializable
 {
    Vector2 Position { get; }
    float Radius { get; }
@@ -81,5 +82,14 @@ internal class Ball : IBall
       if (Radius + nextPosition.Y > owner.BoardSize.Y)
          nextPosition.Y = owner.BoardSize.Y - Radius + 1;
       return nextPosition;
+   }
+
+   public void GetObjectData(SerializationInfo info, StreamingContext context)
+   {
+      info.AddValue("ID", ID);
+      info.AddValue("Radius", Radius);
+      info.AddValue("Mass", Mass);
+      info.AddValue("Position", Position);
+      info.AddValue("Velocity", Velocity);
    }
 }

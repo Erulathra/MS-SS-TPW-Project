@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using System.Runtime.Serialization;
 
 namespace TPW.Data;
 internal class BallFixture : IBall
@@ -25,4 +26,9 @@ internal class BallFixture : IBall
 
    public void Simulate()
    { }
+
+   public void GetObjectData(SerializationInfo info, StreamingContext context)
+   {
+      throw new NotImplementedException();
+   }
 }
