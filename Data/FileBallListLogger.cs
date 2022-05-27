@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Net;
 using System.Threading;
@@ -49,8 +50,8 @@ internal class FileBallListLogger : IBallListLogger
       try
       {
          JObject itemToAdd = JObject.FromObject(ball);
+         itemToAdd["Time"] = DateTime.Now.ToString("HH:mm:ss");
          ballQueue.Enqueue(itemToAdd);
-
 
          if (loggingTask == null || loggingTask.IsCompleted)
          {
@@ -79,7 +80,7 @@ internal class FileBallListLogger : IBallListLogger
       fileMutex.WaitOne();
       try
       {
-         await File.WriteAllTextAsync(logFilePath, output);
+         File.WriteAllText(logFilePath, output);
       }
       finally
       {
