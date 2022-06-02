@@ -23,12 +23,5 @@ namespace TPW.Data.Tests
         {
             Assert.AreEqual(boardSize, balls.BoardSize);
         }
-
-        [Test]
-        public void Test()
-        {
-           string test = "";
-           var array = JArray.Parse(test);
-        }
     }
 }
