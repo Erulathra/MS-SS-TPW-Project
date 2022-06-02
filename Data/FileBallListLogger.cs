@@ -38,7 +38,7 @@ internal class FileBallListLogger : IBallListLogger
       if (loggingTask != null && !loggingTask.IsCompleted)
          return;
 
-      loggingTask = this.LogToFile();
+      loggingTask = Task.Factory.StartNew(this.LogToFile);
    }
 
    private async Task LogToFile()
@@ -49,7 +49,8 @@ internal class FileBallListLogger : IBallListLogger
       {
          try
          {
-            array = JArray.Parse(await File.ReadAllTextAsync(logFilePath));
+            string input = await File.ReadAllTextAsync(logFilePath);
+            array = JArray.Parse(input);
          }
          catch (JsonReaderException)
          {
