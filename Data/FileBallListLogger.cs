@@ -29,16 +29,17 @@ internal class FileBallListLogger : IBallListLogger
       try
       {
          ballQueue.Enqueue(ball);
+
+
+         if (loggingTask == null || loggingTask.IsCompleted)
+         {
+            loggingTask = Task.Factory.StartNew(this.LogToFile);
+         }
       }
       finally
       {
          queueMutex.ReleaseMutex();
       }
-      
-      if (loggingTask != null && !loggingTask.IsCompleted)
-         return;
-
-      loggingTask = Task.Factory.StartNew(this.LogToFile);
    }
 
    private async Task LogToFile()
