@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.IO;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -13,14 +14,33 @@ internal class FileBallListLogger : IBallListLogger
 
    private Task? loggingTask;
 
-   private ConcurrentQueue<IBall> ballQueue = new ConcurrentQueue<IBall>();
+   private readonly ConcurrentQueue<JObject> ballQueue = new ConcurrentQueue<JObject>();
 
    private readonly Mutex queueMutex = new Mutex();
+   private readonly JArray fileDataArray;
 
    public FileBallListLogger()
    {
       string tempPath = Path.GetTempPath();
       logFilePath = tempPath + "balls.json";
+      
+      //If file doesnt exists create new one.
+      if (File.Exists(logFilePath))
+      {
+         try
+         {
+            string input = File.ReadAllText(logFilePath);
+            fileDataArray = JArray.Parse(input);
+            return;
+         }
+         catch (JsonReaderException)
+         {
+            fileDataArray = new JArray();
+         }
+      }
+
+      fileDataArray = new JArray();
+      File.Create(logFilePath);
    }
 
    public void AddToLogQueue(IBall ball)
@@ -28,7 +48,8 @@ internal class FileBallListLogger : IBallListLogger
       queueMutex.WaitOne();
       try
       {
-         ballQueue.Enqueue(ball);
+         JObject itemToAdd = JObject.FromObject(ball);
+         ballQueue.Enqueue(itemToAdd);
 
 
          if (loggingTask == null || loggingTask.IsCompleted)
@@ -42,39 +63,33 @@ internal class FileBallListLogger : IBallListLogger
       }
    }
 
+   private Mutex fileMutex = new Mutex();
+   
    private async Task LogToFile()
    {
-      //If file doesnt exists create new one.
-      JArray array;
-      if (File.Exists(logFilePath))
-      {
-         try
-         {
-            string input = await File.ReadAllTextAsync(logFilePath);
-            array = JArray.Parse(input);
-         }
-         catch (JsonReaderException)
-         {
-            array = new JArray();
-         }
-      }
-      else
-      {
-         array = new JArray();
-         File.Create(logFilePath);
-      }
-      
       //Append logs until queue empty
-      IBall ball;
-      while (ballQueue.TryDequeue(out ball))
+      while (ballQueue.TryDequeue(out JObject ball))
       {
-         JObject itemToAdd = JObject.FromObject(ball);
-         array.Add(itemToAdd);
+         fileDataArray.Add(ball);
       }
       
       // Convert data to string and save it
-      string output = JsonConvert.SerializeObject(array);
-      await File.WriteAllTextAsync(logFilePath ,output);
+      string output = JsonConvert.SerializeObject(fileDataArray);
+      
+      fileMutex.WaitOne();
+      try
+      {
+         await File.WriteAllTextAsync(logFilePath, output);
+      }
+      finally
+      {
+         fileMutex.ReleaseMutex();
+      }
    }
-  
+
+   ~FileBallListLogger()
+   {
+      fileMutex.WaitOne();
+      fileMutex.ReleaseMutex();
+   }
 }
